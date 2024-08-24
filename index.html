@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fear of 13</title>
+    <style>
+      html, body, canvas, button, nav {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+
+      html, body, body > canvas {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      canvas {
+        image-rendering: pixelated;
+      }
+
+      nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        display: flex;
+        justify-content: space-between;
+        background-color: #000;
+      }
+
+      nav button {
+        display: inline-block;
+        font-size: 40px;
+        font-weight: 400;
+        width: 100%;
+        background-color: #000;
+        color: #fff;
+      }
+
+      nav canvas {
+        height: 100px;
+        width: 200px;
+        margin: auto;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <div id="fps"></div> -->
+    <!-- <p><a href="https://js13kgames.com/">JS13K 2023</a> code: <a href="https://viljamipeltola.com/">Viljami</a>, graphics Maria Siira</p> -->
+    <canvas id="app"></canvas>
+    <img id="sheet" src="assets/spritesheet_v1.gif" style="display: none;"/>
+
+    <nav>
+      <button id="foodButton"><canvas id="food"></canvas></button>
+      <button>B</button>
+      <button>C</button>
+    </nav>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
