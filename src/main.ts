@@ -26,7 +26,7 @@ import { create as createState } from './state';
             const { innerWidth: width, innerHeight: height } = window;
             canvas.width = WIDTH;
             canvas.height = HEIGHT;
-            foodCanvas.width = floor(width / 3 / 4);
+            foodCanvas.width = 100;
             foodCanvas.height = 50;
 
             creature.pos.x = floor(WIDTH / 2 - 25);

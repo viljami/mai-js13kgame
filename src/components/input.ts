@@ -3,14 +3,14 @@ export const init = () => {
         foodButton: false,
     };
 
+    const { body } = document;
     const foodButton = document.getElementById("foodButton") as HTMLButtonElement;
 
-    foodButton.addEventListener("pointerdown", () => () => {
-        console.log("down")
+    foodButton.addEventListener("pointerdown", () => {
         input.foodButton = true;
     });
 
-    foodButton.addEventListener("pointerup", () => () => {
+    foodButton.addEventListener("pointerup", () => {
         input.foodButton = false;
     });
 
