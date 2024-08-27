@@ -14,6 +14,7 @@ export class Timer extends EventEmitter {
     stepDuration: Millisecond;
     time = .0;
     targetValue: number;
+    percentage: number;
     running: boolean = true;
 
     constructor(stepDuration: Millisecond, targetValue: number) {
@@ -37,6 +38,8 @@ export class Timer extends EventEmitter {
                 this.value = 0;
                 this.trigger(new TimerEvent())
             }
+
+            this.percentage = this.value / this.targetValue;
         }
     }
 

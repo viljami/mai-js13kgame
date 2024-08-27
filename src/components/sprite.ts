@@ -28,15 +28,19 @@ export class Sprite {
         }
     }
 
-    draw(context, x: number, y: number, invert = false) {
+    draw(context, x: number, y: number, invert = false, dw?: number, dh?: number) {
         const frame = this.frames[this.activeFrame];
         const { x: w, y: h } = frame.size;
-        context.drawImage(this.sheet, frame.pos.x, frame.pos.y, w, h, x, y, w * SCALE, h * SCALE);
+        dw = (dw ? dw : w) * SCALE;
+        dh = (dh ? dh : h) * SCALE;
+        context.drawImage(this.sheet, frame.pos.x, frame.pos.y, w, h, x, y, dw, dh);
 
         if (invert) {
-            context.globalCompositeOperation = 'difference';
+            context.save()
             context.fillStyle = 'white';
-            context.fillRect(x, y, w * SCALE, h * SCALE);
+            context.globalCompositeOperation = 'difference';
+            context.fillRect(x, y, dw, dh);
+            context.restore();
         }
     }
 }

@@ -1,72 +1,42 @@
-import { init as inputInit } from './components/input';
-import { Vec2 } from "./components/vec2";
+import { InputManager } from './components/input';
 import { create as createResources } from "./resources";
 import { Timer } from './components/timer';
-import { ProgressBar } from './components/display/progress-bar';
 import { HEIGHT, WIDTH } from './config';
-import { create as createState } from './state';
+import { TamaView, ViewManager } from './view';
+import { Store } from './store';
 
 (function() {
     window.addEventListener("load", () => {
         const canvas = document.getElementById("app") as HTMLCanvasElement;
-        const context = canvas.getContext("2d") as CanvasRenderingContext2D;
-        context.imageSmoothingEnabled = false;
-        const resources = createResources();
-        const state = createState(resources);
-        const { creature } = state;
-
-        const foodCanvas = document.getElementById("food") as HTMLCanvasElement;
-        const foodContext = foodCanvas.getContext("2d") as CanvasRenderingContext2D;
-        foodContext.imageSmoothingEnabled = false;
-
-        const input = inputInit();
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
 
         const resize = () => {
-            const { floor } = Math;
-            const { innerWidth: width, innerHeight: height } = window;
-            canvas.width = WIDTH;
-            canvas.height = HEIGHT;
-            foodCanvas.width = 100;
-            foodCanvas.height = 50;
-
-            creature.pos.x = floor(WIDTH / 2 - 25);
-            creature.pos.y = floor(HEIGHT / 2 - 25);
+            const { innerWidth, innerHeight } = window;
+            const a = innerWidth < innerHeight ? innerWidth : innerHeight;
+            canvas.style.width = `${a}px`;
+            canvas.style.height = `${a}px`;
         };
-
-        window.addEventListener('resize', resize);
         resize();
+        window.addEventListener('resize', resize);
 
-        const progressBar = new ProgressBar(Vec2.new(0, 0), Vec2.new(WIDTH, 10));
+        const context = canvas.getContext("2d") as CanvasRenderingContext2D;
+        context.imageSmoothingEnabled = false;
 
-
+        const resources = createResources();
+        const input = new InputManager();
+        const store = new Store(resources);
+        const viewManager = new ViewManager(resources, store, input);
+        viewManager.addView('tama', new TamaView(resources, store));
+        viewManager.setActiveView('tama');
 
         const step = (dt: number) => {
             Timer.stepAll(dt);
-            progressBar.setValue(state.day.timer.value / state.day.timer.targetValue);
-
-            // creature.pos.x += creature.speed.x;
-            // if (creature.pos.x >= 100) {
-            //     creature.pos.x = 100;
-            //     creature.speed.x = -1;
-            // }
-            // if (creature.pos.x <= 0) {
-            //     creature.pos.x = 0;
-            //     creature.speed.x = 1;
-            // }
+            viewManager.step(dt);
         };
 
         const draw = (dt: number) => {
-            const sprite = creature.display[creature.state];
-
-            sprite.step(dt);
-            sprite.step(dt);
-
-            context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            sprite.draw(context, creature.pos.x, creature.pos.y);
-            progressBar.draw(context);
-
-            foodContext.clearRect(0, 0, foodCanvas.width, foodCanvas.height);
-            resources.food.idle.draw(foodContext, 0, 0, !input.foodButton);
+            viewManager.draw(context);
         };
 
         let prevDt = 0;
@@ -77,6 +47,7 @@ import { create as createState } from './state';
             draw(diffDt);
             prevDt = dt;
         };
+
         loop(0);
     }, { once: true });
 })();

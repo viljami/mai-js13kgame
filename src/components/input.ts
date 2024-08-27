@@ -1,18 +1,44 @@
-export const init = () => {
-    const input = {
-        foodButton: false,
-    };
+import { Vec2 } from "./vec2";
 
-    const { body } = document;
-    const foodButton = document.getElementById("foodButton") as HTMLButtonElement;
+export class Input {
+    id: number;
+    pos: Vec2;
+    timestamp: number;
 
-    foodButton.addEventListener("pointerdown", () => {
-        input.foodButton = true;
-    });
+    constructor(id: number, pos: Vec2, timestamp: number) {
+        this.id = id;
+        this.pos = pos;
+        this.timestamp = timestamp;
+    }
+}
 
-    foodButton.addEventListener("pointerup", () => {
-        input.foodButton = false;
-    });
+export class InputManager {
+    inputs: Input[] = [];
 
-    return input;
-};
+    activate() {
+        const { body } = document;
+        body.addEventListener("pointerdown", this.onPointerDown);
+        body.addEventListener("pointerup", this.onPointerUp);
+    }
+
+    disable() {
+        this.inputs.length = 0;
+        const { body } = document;
+        body.removeEventListener("pointerdown", this.onPointerDown);
+        body.removeEventListener("pointerup", this.onPointerUp);
+    }
+
+    onPointerDown = ({ x, y, pointerId, timeStamp }: PointerEvent) => {
+        this.inputs.push(new Input(pointerId, Vec2.new(x, y), timeStamp));
+    }
+
+    onPointerUp = ({ x, y, pointerId, timeStamp }: PointerEvent) => {
+        const index = this.inputs.findIndex(({ id }) => id == pointerId);
+
+        if (index != -1) {
+            this.inputs.splice(index, 1);
+        } else {
+            this.inputs.length = 0;
+        }
+    }
+}

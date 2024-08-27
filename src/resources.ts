@@ -2,7 +2,17 @@ import { Frame } from "./components/frame";
 import { Sprite } from "./components/sprite";
 import { Vec2 } from "./components/vec2";
 
-export const create = () => {
+export interface DisplayAsset {
+    size: Vec2,
+    idle: Sprite
+}
+
+export interface Resources {
+    food: DisplayAsset,
+    creature: DisplayAsset,
+}
+
+export const create = (): Resources => {
     const creatureSize = Vec2.new(50, 50);
     const idleFrames = [new Frame(0, 0, creatureSize.x, creatureSize.y), new Frame(creatureSize.x * 2, 0, creatureSize.x, creatureSize.y)];
     // const spritesheet = (() => {
