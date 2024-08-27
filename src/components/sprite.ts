@@ -5,10 +5,11 @@ const SPEED = 700;
 const { floor } = Math;
 
 export class Sprite {
-    public time = 0;
-    public activeFrame = 0;
-    public frames: Frame[];
-    public sheet: HTMLCanvasElement | HTMLImageElement;
+    time = 0;
+    activeFrame = 0;
+    frames: Frame[];
+    sheet: HTMLCanvasElement | HTMLImageElement;
+    speed: number;
 
     constructor(frames: Frame[], sheet: HTMLCanvasElement | HTMLImageElement) {
         this.frames = frames;
@@ -27,7 +28,7 @@ export class Sprite {
     step(dt) {
         this.time += dt;
 
-        if (this.time >= SPEED) {
+        if (this.time >= this.speed) {
             this.time = 0;
             this.activeFrame++;
 
