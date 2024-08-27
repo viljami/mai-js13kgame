@@ -10,6 +10,7 @@ export interface DisplayAsset {
 export interface Resources {
     food: DisplayAsset,
     creature: DisplayAsset,
+    days: DisplayAsset[],
 }
 
 export const create = (): Resources => {
@@ -47,6 +48,21 @@ export const create = (): Resources => {
         creature: {
             size: creatureSize,
             idle: new Sprite(idleFrames, spritesheet),
-        }
+        },
+        days: [
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(0, creatureSize.y * 3, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(creatureSize.x, creatureSize.y * 3, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(creatureSize.x * 2, creatureSize.y * 3, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(0, creatureSize.y * 4, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(creatureSize.x, creatureSize.y * 4, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(creatureSize.x * 2, creatureSize.y * 4, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(0, creatureSize.y * 5, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(creatureSize.x, creatureSize.y * 5, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(creatureSize.x * 2, creatureSize.y * 5, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(0, creatureSize.y * 6, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(creatureSize.x, creatureSize.y * 6, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(creatureSize.x * 2, creatureSize.y * 6, creatureSize.x, creatureSize.y)], spritesheet) },
+            { size: creatureSize.clone(), idle: new Sprite([new Frame(0, creatureSize.y * 7, creatureSize.x, creatureSize.y)], spritesheet) },
+        ]
     };
 };
