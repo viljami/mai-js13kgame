@@ -13,6 +13,15 @@ export class Sprite {
     constructor(frames: Frame[], sheet: HTMLCanvasElement | HTMLImageElement) {
         this.frames = frames;
         this.sheet = sheet;
+        this.speed = SPEED;
+    }
+
+    setSpeed(speedMS: number) {
+        this.speed = speedMS;
+    }
+
+    getSize() {
+        return this.frames[this.activeFrame].size;
     }
 
     step(dt) {

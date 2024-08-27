@@ -101,7 +101,8 @@ export class Gizmo implements Display {
         // context.fillRect(0, 0, w, h);
         // context.restore();
 
-        const { idle, size } = this.resources.food;
+        const { idle } = this.resources.food;
+        const size = idle.getSize();
         drawButton(context, idle, w2 - 45, h2 + size.y + 15, this.button1);
         drawButton(context, idle, w2 - 10, h2 + size.y + 20, this.button2);
         drawButton(context, idle, w2 + 25, h2 + size.y + 15, this.button3);
