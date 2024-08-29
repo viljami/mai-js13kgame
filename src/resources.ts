@@ -8,6 +8,7 @@ export interface DisplayAsset {
 
 export interface Creature extends DisplayAsset {
     hungry: Sprite,
+    idleHungry: Sprite,
 }
 
 export interface Resources {
@@ -17,8 +18,6 @@ export interface Resources {
 }
 
 export const create = (): Resources => {
-    const size5050 = Vec2.new(50, 50);
-    const idleFrames = [new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 2, 0, size5050.x, size5050.y)];
     // const spritesheet = (() => {
     //     const canvas = document.createElement("canvas");
     //     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
@@ -41,6 +40,7 @@ export const create = (): Resources => {
     //     return canvas;
     // })();
 
+    const size5050 = Vec2.new(50, 50);
     const spritesheet = document.getElementById("sheet") as HTMLImageElement;
 
     return {
@@ -50,6 +50,7 @@ export const create = (): Resources => {
         creature: {
             idle: new Sprite([new Frame(0, 0, size5050.x, size5050.y)], spritesheet),
             hungry: new Sprite([new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], spritesheet),
+            idleHungry: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], spritesheet),
         },
         days: [
             { idle: new Sprite([new Frame(0, size5050.y * 3, size5050.x, size5050.y)], spritesheet) },

@@ -1,10 +1,8 @@
 import { Timer, TIMER_EVENT_NAME } from "./components/timer";
-import { Vec2 } from "./components/vec2";
+import { DAY_DURATION, DIRTY_TIME_MAX, HUNGRY_TIME_MAX, PLAYFUL_TIME_MAX, TIRED_TIME_MAX } from "./config";
 import { Resources } from "./resources";
 
-const { floor } = Math;
 const COUNT_SECONDS = 1000.;
-const DAY_DURATION = 60 / 2;
 
 type Action = {
     type: string,
@@ -30,10 +28,10 @@ export class Store {
             },
 
             creature: {
-                hungry: Timer.new(COUNT_SECONDS, DAY_DURATION / 5),
-                tired: Timer.new(COUNT_SECONDS, DAY_DURATION / 2),
-                playful: Timer.new(COUNT_SECONDS, DAY_DURATION / 3),
-                dirty: Timer.new(COUNT_SECONDS, DAY_DURATION / 4),
+                hungry: Timer.new(COUNT_SECONDS, HUNGRY_TIME_MAX),
+                tired: Timer.new(COUNT_SECONDS, TIRED_TIME_MAX),
+                playful: Timer.new(COUNT_SECONDS, PLAYFUL_TIME_MAX),
+                dirty: Timer.new(COUNT_SECONDS, DIRTY_TIME_MAX),
                 display: resources.creature,
                 state: "idle",
             }

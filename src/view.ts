@@ -2,7 +2,7 @@ import { Display } from "./components/display/display";
 import { Gizmo } from "./components/display/gismo";
 import { Resources } from "./resources";
 import { Store } from "./store";
-import { GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, WIDTH } from './config';
+import { GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, SPRITE_SPEED, WIDTH } from './config';
 import { Vec2 } from "./components/vec2";
 import { InputManager } from "./components/input";
 import { ProgressBar } from "./components/display/progress-bar";
@@ -86,6 +86,18 @@ export class TamaView implements Display, Step {
     step(dt: number) {
         // const state = this.store.getState();
         // this.progressBar.setValue(state.day.timer.percentage);
+        const state = this.store.getState();
+        const { percentage } = state.creature.hungry;
+
+        if (percentage < .3) {
+            this.creatureState = 'idle';
+        } else if (percentage > .9) {
+            this.creatureState = 'hungry';
+        } else {
+            this.creatureState = 'idleHungry';
+            this.resources.creature.idleHungry.speed = SPRITE_SPEED * (1.3 - percentage);
+        }
+
         this.resources.creature[this.creatureState].step(dt);
     }
 

@@ -1,8 +1,7 @@
+import { SPRITE_SPEED } from "../config";
 import { Frame } from "./frame";
 
 const SCALE = 1;
-const SPEED = 700;
-const { floor } = Math;
 
 export class Sprite {
     time = 0;
@@ -14,7 +13,7 @@ export class Sprite {
     constructor(frames: Frame[], sheet: HTMLCanvasElement | HTMLImageElement) {
         this.frames = frames;
         this.sheet = sheet;
-        this.speed = SPEED;
+        this.speed = SPRITE_SPEED;
     }
 
     setSpeed(speedMS: number) {
