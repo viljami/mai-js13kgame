@@ -1,32 +1,42 @@
 const { pow } = Math;
 
 // https://easings.net/#easeInOutQuad
-export const easeInOutQuad = (x: number): number =>
+export const easeInOutQuad = (x: number): number => // 0 <= x <= 1
     x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
 
 type EasingFn = (x: number) => number;
 
 export class Easing {
-    public value: number;
-    public duration: number;
-    public time: number;
-    public easingFn: EasingFn;
+    from: number;
+    to: number;
+    value: number = 0;
+    durationMs: number;
+    time: number = 0;
+    easingFn: EasingFn;
 
-    constructor(value: number, duration: number, easingFn: EasingFn) {
-        this.value = value;
-        this.duration = duration;
+    constructor(from: number, to: number, durationMs: number, easingFn: EasingFn) {
+        this.from = from;
+        this.to = to;
+        this.durationMs = durationMs;
         this.easingFn = easingFn;
     }
 
-    step(dt) {
+    step(dt: number) {
         this.time += dt;
 
-        if (this.time >= this.duration) {
-            this.time = this.duration;
+        if (this.time >= this.durationMs) {
+            this.time = this.durationMs;
+            this.value = 1.0;
+        } else {
+            this.value = this.easingFn(this.time / this.durationMs);
         }
     }
 
+    getValue() {
+        return this.from + (this.to - this.from) * this.value;
+    }
+
     isDone() {
-        return this.time >= this.duration;
+        return this.time >= this.durationMs;
     }
 }

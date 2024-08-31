@@ -1,4 +1,4 @@
-import { Vec2 } from "../vec2"
+import { Vec2 } from "../components/vec2"
 import { Display } from "./display";
 
 export type Percentage = number;

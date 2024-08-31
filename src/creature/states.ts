@@ -1,0 +1,98 @@
+import { Vec2 } from "../components/vec2";
+import { Resources } from "../resources";
+import { Store } from "../store";
+import { Button } from "../ui/gismo";
+import { CreatureState } from "./base";
+import { Idle } from "./idle";
+import { Sleep } from "./sleep";
+
+export class Eating {
+
+}
+
+export class Tired {
+
+}
+
+export class Playful {
+
+}
+
+
+export class CreatureStateManager {
+    stack: CreatureState[] = []; // Last is active
+    subStates: CreatureState[] = []; // concurrent with each other and active main state
+    store: Store;
+    resources: Resources;
+
+    constructor(store: Store, resources: Resources) {
+        this.store = store;
+        this.resources = resources;
+        const state = store.getState();
+        this.stack.push(new Idle(this.resources.creature[state.creature.evolution]))
+    }
+
+    getSize(): Vec2 {
+        return this.stack[this.stack.length - 1].creature.idle.frames[0].size;
+    }
+
+    handleInput(buttons: Button[]) {
+        const state = this.store.getState();
+        let active = this.stack[this.stack.length - 1];
+        let isDrops = false;
+
+        for (let { type, down } of buttons) {
+            if (down) {
+                switch (type) {
+                    case 'drops':
+                        isDrops = true;
+
+                        if (!(active instanceof Sleep)) {
+                            this.stack.push(new Sleep(this.resources.creature[state.creature.evolution], this.resources, this.store));
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (!isDrops && active instanceof Sleep) {
+            active.exit();
+            // this.stack.pop();
+            // active = this.stack[this.stack.length - 1];
+        }
+
+        const newState = active.handleInput();
+
+        if (newState != null) {
+            if (active.isDone()) {
+                active.exit();
+                this.stack.pop();
+            }
+
+            newState.enter();
+            this.stack.push(newState);
+            return;
+        }
+
+        if (active.isDone()) {
+            active.exit();
+            this.stack.pop();
+        }
+    }
+
+    step(dt) {
+        const state = this.store.getState();
+        const active = this.stack[this.stack.length - 1];
+        active.setCreature(this.resources.creature[state.creature.evolution]);
+        active.step(dt);
+        this.subStates.forEach(s => s.step(dt));
+    }
+
+    draw(context: CanvasRenderingContext2D) {
+        this.stack[this.stack.length - 1].draw(context);
+        this.subStates.forEach(s => s.draw(context));
+    }
+}

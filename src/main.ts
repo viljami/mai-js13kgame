@@ -27,7 +27,7 @@ import { Store } from './store';
         const input = new InputManager();
         const store = new Store(resources);
         const viewManager = new ViewManager(resources, store, input);
-        viewManager.addView('tama', new TamaView(resources, store));
+        viewManager.addView('tama', new TamaView(resources, store, viewManager.creatureStateManager));
         viewManager.setActiveView('tama');
 
         const step = (dt: number) => {

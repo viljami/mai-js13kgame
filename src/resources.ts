@@ -1,6 +1,7 @@
 import { Frame } from "./components/frame";
 import { Sprite } from "./components/sprite";
 import { Vec2 } from "./components/vec2";
+import { Evolution } from "./creature/levels";
 
 export interface DisplayAsset {
     idle: Sprite
@@ -16,11 +17,41 @@ export interface CreatureStates extends DisplayAsset {
 }
 
 export interface Creature {
-    small: CreatureStates,
-    big: CreatureStates,
-    grown: DisplayAsset,
-    egg: DisplayAsset,
+    [Evolution.SMALL]: CreatureStates,
+    [Evolution.BIG]: CreatureStates,
+    [Evolution.GROWN]: DisplayAsset,
+    [Evolution.EGG]: CreatureStates,
 }
+
+export const statToAsset = (asset) => {
+    switch (asset) {
+        case 'slept':
+            return 'drops';
+        case 'played':
+            return 'note';
+        case 'eaten':
+            return 'food';
+        case 'timers':
+            return;
+        default:
+            throw new Error(`No mapping for asset '${asset}'`);
+    }
+};
+
+export const assetToStat = (stat) => {
+    switch (stat) {
+        case 'drops':
+            return 'slept';
+        case 'note':
+            return 'played';
+        case 'food':
+            return 'eaten';
+        case 'timers':
+            return;
+        default:
+            throw new Error(`No mapping for stat '${stat}'`);
+    }
+};
 
 export interface Resources {
     food: DisplayAsset,
@@ -31,7 +62,8 @@ export interface Resources {
     note: DisplayAsset,
     drops: DisplayAsset,
     hole: DisplayAsset,
-    ufo: DisplayAsset
+    ufo: DisplayAsset,
+    zzz: DisplayAsset,
 }
 
 export const create = (): Resources => {
@@ -57,17 +89,18 @@ export const create = (): Resources => {
     //     return canvas;
     // })();
 
+    const size1010 = Vec2.new(20, 20);
     const size5050 = Vec2.new(50, 50);
     const size100150 = Vec2.new(100, 150);
     const size150100 = Vec2.new(100, 150);
     const spritesheet = document.getElementById("sheet") as HTMLImageElement;
-
+    const eggIdle = new Sprite([new Frame(size5050.x, size5050.y * 2, size5050.x, size5050.y)], spritesheet);
     return {
         food: {
             idle: new Sprite([new Frame(0, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
         },
         creature: {
-            small: {
+            [Evolution.SMALL]: {
                 idle: new Sprite([new Frame(0, 0, size5050.x, size5050.y)], spritesheet),
                 hungry: new Sprite([new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], spritesheet),
                 tired: new Sprite([new Frame(size5050.x * 3, 0, size5050.x, size5050.y)], spritesheet),
@@ -76,7 +109,7 @@ export const create = (): Resources => {
                 dead: new Sprite([new Frame(size5050.x * 7, 0, size5050.x, size5050.y)], spritesheet),
                 idleHungry: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], spritesheet),
             },
-            big: {
+            [Evolution.BIG]: {
                 idle: new Sprite([new Frame(0, size5050.y, size5050.x, size5050.y)], spritesheet),
                 hungry: new Sprite([new Frame(size5050.x * 2, size5050.x, size5050.x, size5050.y)], spritesheet),
                 tired: new Sprite([new Frame(size5050.x * 3, size5050.x, size5050.x, size5050.y)], spritesheet),
@@ -85,11 +118,17 @@ export const create = (): Resources => {
                 dead: new Sprite([new Frame(size5050.x * 7, size5050.x, size5050.x, size5050.y)], spritesheet),
                 idleHungry: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 2, size5050.x, size5050.x, size5050.y)], spritesheet),
             },
-            grown: {
+            [Evolution.GROWN]: {
                 idle: new Sprite([new Frame(50 * 6, size100150.y, size100150.x, size100150.y)], spritesheet),
             },
-            egg: {
-                idle: new Sprite([new Frame(size5050.x, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
+            [Evolution.EGG]: {
+                idle: eggIdle,
+                hungry: eggIdle,
+                tired: eggIdle,
+                angry: eggIdle,
+                sick: eggIdle,
+                dead: eggIdle,
+                idleHungry: eggIdle,
             }
         },
         days: [
@@ -125,5 +164,8 @@ export const create = (): Resources => {
         ufo: {
             idle: new Sprite([new Frame(size5050.x * 6, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
         },
+        zzz: {
+            idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 3, size1010.x, size1010.y)], spritesheet),
+        }
     };
 };
