@@ -19,11 +19,12 @@ export class FoodGameView extends View {
     resources: Resources;
     store: Store;
     creatureState = 'idle';
-    timeSpawn = 0.;
     timeEat = 0.;
     timeGravity = 1000.;
     timeMove = 0.;
+    timeSpawn = 0.;
     isExit = false;
+
     constructor(resources: Resources, store: Store) {
         super();
         this.resources = resources;
@@ -40,6 +41,7 @@ export class FoodGameView extends View {
         this.creatureVel.x = 0;
         this.creatureVel.y = 0;
         this.foods.length = 0;
+        this.timeEat = 0.;
         this.timeGravity = 1000.; // First spawn earlier
         this.timeMove = 0.;
         this.timeSpawn = 0.;
@@ -106,14 +108,16 @@ export class FoodGameView extends View {
         }
 
         this.foods = this.foods.filter(a => {
-            const dx = this.creaturePos.x - a.x;
-            const dy = this.creaturePos.y - a.y;
+            if (this.creatureState == 'idle') {
+                const dx = this.creaturePos.x - a.x;
+                const dy = this.creaturePos.y - a.y;
 
-            if (abs(dx) < 10 && abs(dy) < 10) {
-                this.store.dispatch(eat);
-                this.creatureState = 'hungry';
-                this.timeEat = 0.;
-                return false;
+                if (abs(dx) < 10 && abs(dy) < 10) {
+                    this.store.dispatch(eat);
+                    this.creatureState = 'hungry';
+                    this.timeEat = 0.;
+                    return false;
+                }
             }
 
             return a.y < GIZMO_SCREEN_HEIGHT - 20;
