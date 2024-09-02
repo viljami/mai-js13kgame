@@ -55,6 +55,21 @@ export class CreatureStateManager {
                         }
 
                         break;
+
+                    case 'note':
+                        isNote = true;
+                        if (!(active instanceof Play)) {
+                            this.stack.push(new Play(this.resources.creature[state.creature.evolution], this.resources, this.store));
+                        }
+                        break;
+
+                    case 'food':
+                        isFood = true;
+                        if (!(active instanceof Eat)) {
+                            this.stack.push(new Eat(this.resources.creature[state.creature.evolution], this.resources, this.store));
+                        }
+                        break;
+
                     default:
                         break;
                 }
@@ -63,8 +78,14 @@ export class CreatureStateManager {
 
         if (!isDrops && active instanceof Sleep) {
             active.exit();
-            // this.stack.pop();
-            // active = this.stack[this.stack.length - 1];
+        }
+
+        if (!isFood && active instanceof Eat) {
+            active.exit();
+        }
+
+        if (!isNote && active instanceof Play) {
+            active.exit();
         }
 
         const newState = active.handleInput();
