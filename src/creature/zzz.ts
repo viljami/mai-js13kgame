@@ -3,7 +3,7 @@ import { Sprite } from "../components/sprite";
 import { Vec2 } from "../components/vec2";
 import { Resources } from "../resources";
 import { Display } from "../ui/display";
-import { Step } from "../view";
+import { Step } from "../views/view-manager";
 
 export class SleepZzz implements Step, Display {
     pos: Vec2;

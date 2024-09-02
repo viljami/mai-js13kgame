@@ -2,8 +2,10 @@ import { InputManager } from './components/input';
 import { create as createResources } from "./resources";
 import { Timer } from './components/timer';
 import { HEIGHT, WIDTH } from './config';
-import { TamaView, ViewManager } from './view';
+import { ViewManager } from './views/view-manager';
 import { Store } from './store';
+import { MainView } from './views/main';
+import { FoodGameView } from './views/food-game';
 
 (function() {
     window.addEventListener("load", () => {
@@ -27,8 +29,9 @@ import { Store } from './store';
         const input = new InputManager();
         const store = new Store(resources);
         const viewManager = new ViewManager(resources, store, input);
-        viewManager.addView('tama', new TamaView(resources, store, viewManager.creatureStateManager));
-        viewManager.setActiveView('tama');
+        viewManager.addView('main', new MainView(resources, store, viewManager.creatureStateManager));
+        viewManager.addView('foodGame', new FoodGameView(resources, store));
+        viewManager.setActiveView('main');
 
         const step = (dt: number) => {
             Timer.stepAll(dt);

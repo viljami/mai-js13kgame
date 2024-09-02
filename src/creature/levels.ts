@@ -10,19 +10,19 @@ export const levels = {
     path: [Evolution.EGG, Evolution.SMALL, Evolution.BIG, Evolution.GROWN],
     requirements: {
         [Evolution.EGG]: { // Start state -> does not require anything
-            slept: 10,
+            slept: 1,
             timers: ['tired']
         },
         [Evolution.SMALL]: {
-            eaten: 30,
-            slept: 20,
-            played: 10,
-            timers: ['hungry', 'tired', 'dirty']
+            slept: 5,
+            eaten: 5,
+            played: 5,
+            timers: ['hungry', 'tired', 'playful']
         },
         [Evolution.BIG]: {
-            eaten: 60,
-            slept: 40,
-            played: 30,
+            slept: 10,
+            eaten: 10,
+            played: 10,
             timers: ['hungry', 'tired', 'dirty', 'playful']
         },
         [Evolution.GROWN]: {

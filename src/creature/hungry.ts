@@ -34,6 +34,6 @@ export class Hungry extends CreatureState {
     }
 
     isDone(): boolean {
-        return this.store.getState().creature.hungry.value < 0.3; // "Root state"
+        return this.store.getState().creature.hungry.value < 0.3;
     }
 }

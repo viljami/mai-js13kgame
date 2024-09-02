@@ -63,6 +63,7 @@ export class Gizmo implements Display {
 
         this.enabled = false;
         this.input.disable();
+        this.buttons.forEach(a => a.down = false);
     }
 
     step(dt: number) {
@@ -71,33 +72,45 @@ export class Gizmo implements Display {
         const w2 = floor(w / 2.);
         this.buttons.forEach(a => a.down = false);
 
-        // this.input.inputs.forEach(({ pos }) => {
         if (this.input.inputs.length > 0) {
             const pos = this.input.inputs[0].pos;
             const x = pos.x / innerWidth * WIDTH;
             const all = this.buttons;
 
-            for (let i = 0; i < this.buttons.length; i++) {
-                const button = this.buttons[i];
-
-                if (all.length == 1) {
-                    this.buttons[i].down = true;
+            switch (all.length) {
+                case 1:
+                    this.buttons[0].down = true;
                     break;
-                }
+                case 2:
+                    if (x <= w2 - 15 + 30 * 0) {
+                        this.buttons[0].down = true;
+                        break;
+                    }
 
-                if (i < all.length - 1) {
-                    if (x < w2 - 15 + 30 * i) {
-                        this.buttons[i].down = true;
+                    if (x > w2 - 15 + 30 * 1) {
+                        this.buttons[1].down = true;
+                        break;
                     }
                     break;
-                }
+                case 3:
+                    if (x < w2 - 15 + 30 * 0) {
+                        this.buttons[0].down = true;
+                        break;
+                    }
 
-                if (x > w2 - 15 + 30 * i) {
-                    this.buttons[i].down = true;
+                    if (x <= w2 - 15 + 30 * 1) {
+                        this.buttons[1].down = true;
+                        break;
+                    }
+
+                    if (x > w2 - 15 + 30 * 1) {
+                        this.buttons[2].down = true;
+                        break;
+                    }
                     break;
-                }
+                default:
+                    throw new Error(`More buttons than can handle ${all.length}`);
             }
-        // });
         }
     }
 

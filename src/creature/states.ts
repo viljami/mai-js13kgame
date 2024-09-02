@@ -3,8 +3,8 @@ import { Resources } from "../resources";
 import { Store } from "../store";
 import { Button } from "../ui/gismo";
 import { CreatureState } from "./base";
+import { Eat, Play, Sleep } from "./bubbling";
 import { Idle } from "./idle";
-import { Sleep } from "./sleep";
 
 export class Eating {
 
@@ -40,11 +40,14 @@ export class CreatureStateManager {
         const state = this.store.getState();
         let active = this.stack[this.stack.length - 1];
         let isDrops = false;
+        let isFood = false;
+        let isNote = false;
+
 
         for (let { type, down } of buttons) {
             if (down) {
                 switch (type) {
-                    case 'drops':
+                    case 'zzz':
                         isDrops = true;
 
                         if (!(active instanceof Sleep)) {
