@@ -26,7 +26,7 @@ export interface Creature {
 export const statToAsset = (asset) => {
     switch (asset) {
         case 'slept':
-            return 'drops';
+            return 'zzz';
         case 'played':
             return 'note';
         case 'eaten':
@@ -40,7 +40,7 @@ export const statToAsset = (asset) => {
 
 export const assetToStat = (stat) => {
     switch (stat) {
-        case 'drops':
+        case 'zzz':
             return 'slept';
         case 'note':
             return 'played';
@@ -64,6 +64,7 @@ export interface Resources {
     hole: DisplayAsset,
     ufo: DisplayAsset,
     zzz: DisplayAsset,
+    bubble: DisplayAsset,
 }
 
 export const create = (): Resources => {
@@ -91,13 +92,27 @@ export const create = (): Resources => {
 
     const size1010 = Vec2.new(20, 20);
     const size5050 = Vec2.new(50, 50);
-    const size100150 = Vec2.new(100, 150);
+    const size100100 = Vec2.new(100, 100);
     const size150100 = Vec2.new(100, 150);
     const spritesheet = document.getElementById("sheet") as HTMLImageElement;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.drawImage(spritesheet, 0, 0);
+    const imageData = context.getImageData(0, 0, spritesheet.width, spritesheet.height);
+    const { data } = imageData;
+    for (let i = 0; i < data.length; i += 4) {
+        if (data[i] === 255) {
+            data[i + 3] = 0;
+        }
+    }
+    context.putImageData(imageData, 0, 0);
+    const spritesheetTransparent = document.createElement('img');
+    spritesheetTransparent.src = canvas.toDataURL();
     const eggIdle = new Sprite([new Frame(size5050.x, size5050.y * 2, size5050.x, size5050.y)], spritesheet);
+
     return {
         food: {
-            idle: new Sprite([new Frame(0, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
+            idle: new Sprite([new Frame(0, size5050.y * 2, size5050.x, size5050.y)], spritesheetTransparent),
         },
         creature: {
             [Evolution.SMALL]: {
@@ -119,7 +134,7 @@ export const create = (): Resources => {
                 idleHungry: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 2, size5050.x, size5050.x, size5050.y)], spritesheet),
             },
             [Evolution.GROWN]: {
-                idle: new Sprite([new Frame(50 * 6, size100150.y, size100150.x, size100150.y)], spritesheet),
+                idle: new Sprite([new Frame(50 * 6, 150, size100100.x, size100100.y)], spritesheet),
             },
             [Evolution.EGG]: {
                 idle: eggIdle,
@@ -166,6 +181,9 @@ export const create = (): Resources => {
         },
         zzz: {
             idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 3, size1010.x, size1010.y)], spritesheet),
+        },
+        bubble: {
+            idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 3 + 20, size1010.x, size1010.y)], spritesheet),
         }
     };
 };
