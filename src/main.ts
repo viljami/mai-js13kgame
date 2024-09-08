@@ -1,5 +1,4 @@
 import { InputManager } from './components/input';
-import { create as createResources } from "./resources";
 import { Timer } from './components/timer';
 import { HEIGHT, WIDTH } from './config';
 import { ViewManager } from './views/view-manager';
@@ -25,12 +24,9 @@ import { FoodGameView } from './views/food-game';
         const context = canvas.getContext("2d") as CanvasRenderingContext2D;
         context.imageSmoothingEnabled = false;
 
-        const resources = createResources();
-        const input = new InputManager();
-        const store = new Store(resources);
-        const viewManager = new ViewManager(resources, store, input);
-        viewManager.addView('main', new MainView(resources, store, viewManager.creatureStateManager));
-        viewManager.addView('foodGame', new FoodGameView(resources, store));
+        const viewManager = new ViewManager(new InputManager());
+        viewManager.addView('main', new MainView(viewManager.creatureStateManager));
+        viewManager.addView('foodGame', new FoodGameView());
         viewManager.setActiveView('main');
 
         const step = (dt: number) => {

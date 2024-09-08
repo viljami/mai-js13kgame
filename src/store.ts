@@ -10,6 +10,11 @@ type Action = {
     payload: any
 }
 
+export type Button = {
+    type: string,
+    down: boolean
+};
+
 const INCREMENT_DAY_COUNT = "INCREMENT_DAY_COUNT";
 const incrementDayCount: Action = {
     type: INCREMENT_DAY_COUNT,

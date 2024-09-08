@@ -1,8 +1,8 @@
 import { Vec2 } from "../components/vec2";
-import { GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH } from "../config";
-import { Resources } from "../resources";
-import { eat, Store } from "../store";
-import { Button } from "../ui/gismo";
+import { GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH, GIZMO_SCREEN_WIDTH_HALF } from "../config";
+import { Resources, resourcesService } from "../resources";
+import { Button, eat, setButtons, Store } from "../store";
+import { Wave } from "./animations/wave";
 import { NextView, View } from "./view-manager";
 
 const SPAWN_FOOD_DELAY = 2000;
@@ -23,16 +23,17 @@ export class FoodGameView extends View {
     timeGravity = 1000.;
     timeMove = 0.;
     timeSpawn = 0.;
+    exitAnimation = new Wave(Vec2.new(GIZMO_SCREEN_WIDTH_HALF, GIZMO_SCREEN_HEIGHT_HALF));
     isExit = false;
 
-    constructor(resources: Resources, store: Store) {
+    constructor() {
         super();
-        this.resources = resources;
-        this.store = store;
+        this.resources = resourcesService.getInstance();
+        this.store = Store.getInstance();
     }
 
     isDone() {
-        return this.isExit;
+        return this.isExit && this.exitAnimation.isDone();
     }
 
     enter() {
@@ -74,6 +75,10 @@ export class FoodGameView extends View {
     }
 
     step(dt: number) {
+        if (this.isExit) {
+            this.exitAnimation.step(dt);
+        }
+
         this.timeGravity += dt;
         this.timeEat += dt;
         this.timeMove += dt;
@@ -125,11 +130,14 @@ export class FoodGameView extends View {
     }
 
     draw(context: CanvasRenderingContext2D) {
-        const state = this.store.getState();
-        const creature = this.resources.creature[state.creature.evolution];
-        const { size } = creature.idle.frames[0];
+        if (this.isExit) {
+            this.exitAnimation.draw(context);
+        } else {
+            const state = this.store.getState();
+            const creature = this.resources.creature[state.creature.evolution];
 
-        creature[this.creatureState].draw(context, this.creaturePos.x, this.creaturePos.y, false, 25, 25);
-        this.foods.forEach(a => this.resources.food.idle.draw(context, a.x, a.y, false, 20, 20));
+            creature[this.creatureState].draw(context, this.creaturePos.x, this.creaturePos.y, false, 25, 25);
+            this.foods.forEach(a => this.resources.food.idle.draw(context, a.x, a.y, false, 20, 20));
+        }
     }
 }

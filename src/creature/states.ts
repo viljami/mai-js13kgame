@@ -1,10 +1,11 @@
 import { Vec2 } from "../components/vec2";
-import { Resources } from "../resources";
-import { Store } from "../store";
-import { Button } from "../ui/gismo";
+import { Resources, resourcesService } from "../resources";
+import { Button, Store, toggleInput } from "../store";
+import { Wave } from "../views/animations/wave";
 import { CreatureState } from "./base";
 import { Eat, Play, Sleep } from "./bubbling";
 import { Idle } from "./idle";
+import { Evolution } from "./levels";
 
 export class Eating {
 
@@ -24,12 +25,15 @@ export class CreatureStateManager {
     subStates: CreatureState[] = []; // concurrent with each other and active main state
     store: Store;
     resources: Resources;
+    evolution: Evolution;
+    evolveAnim = new Wave(Vec2.new(50, 50));
 
-    constructor(store: Store, resources: Resources) {
-        this.store = store;
-        this.resources = resources;
-        const state = store.getState();
-        this.stack.push(new Idle(this.resources.creature[state.creature.evolution]))
+    constructor() {
+        this.resources = resourcesService.getInstance();
+        this.store = Store.getInstance();
+        const state = this.store.getState();
+        this.evolution = state.creature.evolution;
+        this.stack.push(new Idle(this.resources.creature[this.evolution]))
     }
 
     getSize(): Vec2 {
@@ -42,7 +46,6 @@ export class CreatureStateManager {
         let isDrops = false;
         let isFood = false;
         let isNote = false;
-
 
         for (let { type, down } of buttons) {
             if (down) {
