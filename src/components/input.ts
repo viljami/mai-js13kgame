@@ -18,8 +18,8 @@ export class InputManager {
     inputs: Input[] = [];
 
     activate() {
-        this.inputs.length = 0;
         const { body } = document;
+        document.addEventListener('contextmenu', this.disableContextMenu);
         body.addEventListener("keydown", this.onKeyDown);
         body.addEventListener("pointerdown", this.onPointerDown);
         body.addEventListener("pointermove", this.onPointerUp);
@@ -27,11 +27,13 @@ export class InputManager {
         body.addEventListener("pointerleave", this.onPointerUp);
         body.addEventListener("pointerout", this.onPointerUp);
         body.addEventListener("pointercancel", this.onPointerUp);
+        this.inputs.length = 0;
     }
 
     disable() {
         const { body } = document;
-        body.addEventListener("keyup", this.onKeyUp);
+        document.removeEventListener('contextmenu', this.disableContextMenu);
+        body.removeEventListener("keyup", this.onKeyUp);
         body.removeEventListener("pointerdown", this.onPointerDown);
         body.removeEventListener("pointermove", this.onPointerUp);
         body.removeEventListener("pointerup", this.onPointerUp);
@@ -40,6 +42,10 @@ export class InputManager {
         body.removeEventListener("pointercancel", this.onPointerUp);
         this.inputs.length = 0;
     }
+
+    disableContextMenu = (event) => {
+        event.preventDefault();
+    };
 
     onKeyDown = ({ key }: KeyboardEvent) => {
         switch (key) {
@@ -53,6 +59,7 @@ export class InputManager {
                 this.inputs[0] = new Input(KEYBOARD_EVENT_ID + 2, Vec2.new(window.innerWidth / 2, 0), 0);
                 break;
             default:
+                this.inputs.length = 0;
                 break;
         }
     }
@@ -76,13 +83,16 @@ export class InputManager {
 
         if (index != -1) {
             this.inputs.splice(index, 1);
+        } else {
+            this.inputs.length = 0;
         }
     }
 
     onPointerDown = (e: PointerEvent) => {
         e.preventDefault();
         const { x, y, pointerId, timeStamp } = e;
-        this.inputs.push(new Input(pointerId, Vec2.new(x, y), timeStamp));
+        // this.inputs.push(new Input(pointerId, Vec2.new(x, y), timeStamp));
+        this.inputs[0] =new Input(pointerId, Vec2.new(x, y), timeStamp);
         return false;
     }
 
