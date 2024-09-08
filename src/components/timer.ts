@@ -15,7 +15,7 @@ export class Timer extends EventEmitter {
     time = .0;
     targetValue: number;
     percentage: number;
-    running: boolean = true;
+    running: boolean = false;
 
     constructor(stepDuration: Millisecond, targetValue: number) {
         super();
