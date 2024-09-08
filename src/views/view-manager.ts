@@ -1,7 +1,7 @@
 import { Display } from "../ui/display";
 import { Gizmo } from "../ui/gismo";
 import { Resources, resourcesService, statToAsset } from "../resources";
-import { Button, setButtons, Store } from "../store";
+import { Button, End, setButtons, Store } from "../store";
 import { GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, WIDTH } from '../config';
 import { Vec2 } from "../components/vec2";
 import { InputManager } from "../components/input";
@@ -75,7 +75,7 @@ export class ViewManager implements Display, Step {
         const activeView = this.views[this.activeViewName];
         const nextViewName = activeView.handleInput(this.store.getState().buttons);
 
-        if (nextViewName) {
+        if (this.nextViewName !== 'end' && nextViewName) {
             this.nextViewName = nextViewName;
             this.gizmo.disable();
             activeView.exit();
@@ -88,6 +88,13 @@ export class ViewManager implements Display, Step {
             this.nextViewName = '';
             this.setActiveView(newView);
             return;
+        }
+
+        if (state.end !== End.NOT_YET) {
+            this.nextViewName = 'end';
+            this.gizmo.disable();
+            this.store.dispatch(setButtons([]));
+            activeView.exit();
         }
 
         activeView.step(dt);

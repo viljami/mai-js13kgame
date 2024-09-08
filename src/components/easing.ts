@@ -4,6 +4,12 @@ const { pow } = Math;
 export const easeInOutQuad = (x: number): number => // 0 <= x <= 1
     x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
 
+export const easeInQuad = (x: number): number => x * x;
+
+export const easeOutQuad = (x: number): number => 1 - (1 - x) * (1 - x);
+
+export const easeLinear = (x: number): number => x;
+
 type EasingFn = (x: number) => number;
 
 export interface BaseEasing {

@@ -2,6 +2,7 @@ import { CREATURE_SIDE_JIGGLE_DELAY } from "../config";
 import { CreatureStates } from "../resources";
 import { Jiggle } from "./jiggle";
 import { CreatureState } from "./base";
+import { Vec2 } from "../components/vec2";
 
 export class Idle extends CreatureState {
     lastSideJiggle: number = 0;

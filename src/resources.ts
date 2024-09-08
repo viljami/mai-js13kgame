@@ -99,6 +99,8 @@ const create = (): Resources => {
     const size150100 = Vec2.new(100, 150);
     const spritesheet = document.getElementById("sheet") as HTMLImageElement;
     const canvas = document.createElement('canvas');
+    canvas.width = spritesheet.width;
+    canvas.height = spritesheet.height;
     const context = canvas.getContext('2d');
     context.drawImage(spritesheet, 0, 0);
     const imageData = context.getImageData(0, 0, spritesheet.width, spritesheet.height);
@@ -199,7 +201,7 @@ const create = (): Resources => {
             idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
         },
         ufo: {
-            idle: new Sprite([new Frame(size5050.x * 6, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
+            idle: new Sprite([new Frame(size5050.x * 6, size5050.y * 2, size5050.x, size5050.y)], spritesheetTransparent),
         },
         zzz: {
             idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 3, size1010.x, size1010.y)], spritesheet),

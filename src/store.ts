@@ -67,7 +67,7 @@ export const moveCreature = (diff: number) => ({
     payload: diff
 });
 
-enum End {
+export enum End {
     NOT_YET,
     SIMPLY_DEAD,
     BY_UFO,
