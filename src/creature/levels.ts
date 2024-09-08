@@ -23,7 +23,7 @@ export const levels = {
             slept: 10,
             eaten: 10,
             played: 10,
-            timers: ['hungry', 'tired', 'dirty', 'playful']
+            timers: ['hungry', 'tired', 'playful']
         },
         [Evolution.GROWN]: {
             eaten: 1000,

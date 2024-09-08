@@ -47,17 +47,24 @@ export class FoodGameView extends View {
         this.timeMove = 0.;
         this.timeSpawn = 0.;
         this.isExit = false;
+        this.exitAnimation.stop();
+        this.exitAnimation.reset();
+        this.store.dispatch(setButtons(['left', 'right', 'down']));
     }
 
     exit() {
+        this.exitAnimation.start();
         this.isExit = true;
     }
 
     handleInput(buttons: Button[]): NextView | undefined {
         const left = buttons[0].down;
-        this.isExit = buttons[1].down;
-        const right = buttons[buttons.length - 1].down;
+        const right = buttons[1].down;
 
+        if (buttons[buttons.length - 1].down) {
+            this.exit();
+            return;
+        }
 
         if (left) {
             this.creatureVel.x = -1;

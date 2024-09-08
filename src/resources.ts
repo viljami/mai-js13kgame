@@ -65,9 +65,12 @@ export interface Resources {
     ufo: DisplayAsset,
     zzz: DisplayAsset,
     bubble: DisplayAsset,
+    left: DisplayAsset,
+    right: DisplayAsset,
+    down: DisplayAsset,
 }
 
-export const create = (): Resources => {
+const create = (): Resources => {
     // const spritesheet = (() => {
     //     const canvas = document.createElement("canvas");
     //     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
@@ -109,6 +112,25 @@ export const create = (): Resources => {
     const spritesheetTransparent = document.createElement('img');
     spritesheetTransparent.src = canvas.toDataURL();
     const eggIdle = new Sprite([new Frame(size5050.x, size5050.y * 2, size5050.x, size5050.y)], spritesheet);
+
+    const arrowCanvas = document.createElement('canvas');
+    const arrowContext = arrowCanvas.getContext('2d');
+    arrowContext.fillStyle = '#000';
+    // left
+    arrowContext.moveTo(25, 5);
+    arrowContext.lineTo(25, 45);
+    arrowContext.lineTo(5, 25);
+    arrowContext.fill();
+    //right
+    arrowContext.moveTo(75, 5);
+    arrowContext.lineTo(75, 45);
+    arrowContext.lineTo(95, 25);
+    arrowContext.fill();
+    //down
+    arrowContext.moveTo(105, 25);
+    arrowContext.lineTo(145, 25);
+    arrowContext.lineTo(125, 45);
+    arrowContext.fill();
 
     return {
         food: {
@@ -184,6 +206,28 @@ export const create = (): Resources => {
         },
         bubble: {
             idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 3 + 20, size1010.x, size1010.y)], spritesheet),
+        },
+        left: {
+            idle: new Sprite([new Frame(0, 0, size5050.x, size5050.y)], arrowCanvas),
+        },
+        right: {
+            idle: new Sprite([new Frame(size5050.x, 0, size5050.x, size5050.y)], arrowCanvas),
+        },
+        down: {
+            idle: new Sprite([new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], arrowCanvas),
+
         }
     };
 };
+
+let resources: Resources;
+export const resourcesService = {
+    getInstance: () => {
+        if (resources) {
+            return resources;
+        }
+
+        resources = create();
+        return resources;
+    }
+}

@@ -113,7 +113,27 @@ export class CreatureStateManager {
     step(dt) {
         const state = this.store.getState();
         const active = this.stack[this.stack.length - 1];
-        active.setCreature(this.resources.creature[state.creature.evolution]);
+        const { evolution } = state.creature;
+
+        if (this.evolution != evolution) {
+            if (this.evolveAnim.isStopped) {
+                this.store.dispatch(toggleInput(false));
+                this.evolveAnim.start();
+            }
+
+            this.evolveAnim.step(dt);
+
+            if (this.evolveAnim.isDone()) {
+                this.evolveAnim.stop();
+                this.evolveAnim.reset();
+                this.evolution = evolution;
+                const creature = this.resources.creature[this.evolution];
+                this.stack.forEach(a => a.setCreature(creature));
+                this.subStates.forEach(a => a.setCreature(creature));
+                this.store.dispatch(toggleInput(true));
+            }
+        }
+
         active.step(dt);
         this.subStates.forEach(s => s.step(dt));
     }

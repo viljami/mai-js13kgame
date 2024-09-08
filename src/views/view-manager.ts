@@ -1,7 +1,7 @@
 import { Display } from "../ui/display";
-import { Button, Gizmo } from "../ui/gismo";
-import { Resources, statToAsset } from "../resources";
-import { Store } from "../store";
+import { Gizmo } from "../ui/gismo";
+import { Resources, resourcesService, statToAsset } from "../resources";
+import { Button, setButtons, Store } from "../store";
 import { GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, WIDTH } from '../config';
 import { Vec2 } from "../components/vec2";
 import { InputManager } from "../components/input";
@@ -20,14 +20,12 @@ export interface InputHandler {
     handleInput(buttons: Button[]): NextView | undefined;
 }
 
-export class View implements Display, Step, InputHandler {
+export abstract class View implements Display, Step, InputHandler {
     step(dt: number) {
         throw new Error("Method not implemented.");
     }
 
-    handleInput(buttons: Button[]): NextView | undefined {
-        throw new Error("Method not implemented.");
-    }
+    abstract handleInput(buttons: Button[]): NextView | undefined;
 
     draw(context: CanvasRenderingContext2D) {
         throw new Error("Method not implemented.");
@@ -51,14 +49,13 @@ export class ViewManager implements Display, Step {
     progressBar = new ProgressBar(Vec2.new(GIZMO_MARGIN, GIZMO_MARGIN / 2), Vec2.new(20, 20));
     creatureStateManager: CreatureStateManager;
     nextViewName = '';
-    timerViewChange = -1;
 
-    constructor(resources: Resources, store: Store, input: InputManager) {
-        this.resources = resources;
-        this.store = store;
-        this.gizmo = new Gizmo(resources, Vec2.new(WIDTH, HEIGHT), input);
+    constructor(input: InputManager) {
+        this.resources = resourcesService.getInstance();
+        this.store = Store.getInstance();
+        this.gizmo = new Gizmo(Vec2.new(WIDTH, HEIGHT), input);
         this.gizmo.activate();
-        this.creatureStateManager = new CreatureStateManager(store, resources);
+        this.creatureStateManager = new CreatureStateManager();
     }
 
     addView(name: string, view: View) {
@@ -73,17 +70,10 @@ export class ViewManager implements Display, Step {
         const state = this.store.getState();
         this.progressBar.setValue(state.day.timer.percentage);
 
-        const { evolution } = state.creature;
-        const required = levels.requirements[evolution];
-
-        this.gizmo.setButtonTypes(Object
-            .entries(required)
-            .map(([key]) => statToAsset(key))
-            .filter(a => !!a))
         this.gizmo.step(dt);
 
         const activeView = this.views[this.activeViewName];
-        const nextViewName = activeView.handleInput(this.gizmo.buttons);
+        const nextViewName = activeView.handleInput(this.store.getState().buttons);
 
         if (nextViewName) {
             this.nextViewName = nextViewName;
@@ -94,27 +84,10 @@ export class ViewManager implements Display, Step {
         if (activeView.isDone()) {
             this.gizmo.disable();
 
-            if (this.nextViewName !== '') {
-                const nextView = this.views[this.nextViewName];
-                nextView.enter();
-                nextView.step(dt);
-                this.activeViewName = this.nextViewName;
-                this.nextViewName = '';
-
-                if (this.timerViewChange != -1) {
-                    clearTimeout(this.timerViewChange);
-                }
-
-                this.timerViewChange = setTimeout(() => {
-                    this.gizmo.activate();
-                    this.timerViewChange;
-                }, VIEW_CHANGE_DELAY);
-
-                return;
-            } else {
-                this.views.main.enter();
-                this.activeViewName = 'main';
-            }
+            const newView = this.nextViewName || 'main';
+            this.nextViewName = '';
+            this.setActiveView(newView);
+            return;
         }
 
         activeView.step(dt);
@@ -146,5 +119,7 @@ export class ViewManager implements Display, Step {
 
     setActiveView(viewName: string) {
         this.activeViewName = viewName;
+        this.views[this.activeViewName].enter();
+        this.gizmo.activate();
     }
 }

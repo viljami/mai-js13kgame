@@ -1,10 +1,11 @@
 import { BUTTON_HEIGHT, BUTTON_WIDTH, GIZMO_EARS_SIZE, GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, WIDTH } from "../config";
-import { Resources } from "../resources";
+import { Resources, resourcesService } from "../resources";
 import { Input, InputManager } from "../components/input";
 import { Sprite } from "../components/sprite";
 import { Vec2 } from "../components/vec2";
 import { Display } from "./display";
 import { Evolution, levels } from "../creature/levels";
+import { setButtonsUp, Store } from "../store";
 
 const { floor, PI } = Math;
 const PI2 = PI * 2.;
@@ -18,29 +19,18 @@ const drawButton = (context: CanvasRenderingContext2D, sprite: Sprite, x: number
     sprite.draw(context, x, y, active, BUTTON_WIDTH, BUTTON_HEIGHT);
 }
 
-export type Button = {
-    type: string,
-    down: boolean
-};
-
 export class Gizmo implements Display {
     size: Vec2;
     resources: any;
     input: InputManager;
     enabled = false;
-    buttons: Button[] = [];
+    store: Store;
 
-    constructor(resources: Resources, size: Vec2, input: InputManager) {
+    constructor(size: Vec2, input: InputManager) {
         this.size = size;
-        this.resources = resources;
+        this.resources = resourcesService.getInstance();
+        this.store = Store.getInstance();
         this.input = input;
-    }
-
-    setButtonTypes(buttonTypes: string[]) {
-        if (buttonTypes.length != this.buttons.length) {
-            this.buttons.length = buttonTypes.length;
-            this.buttons = buttonTypes.map(type => ({ type, down: false }));
-        }
     }
 
     setSize(size: Vec2) {
@@ -52,6 +42,7 @@ export class Gizmo implements Display {
             return;
         }
 
+        this.store.dispatch(setButtonsUp);
         this.enabled = true;
         this.input.activate();
     }
@@ -63,53 +54,60 @@ export class Gizmo implements Display {
 
         this.enabled = false;
         this.input.disable();
-        this.buttons.forEach(a => a.down = false);
+        this.store.dispatch(setButtonsUp);
     }
 
     step(dt: number) {
+        this.store.dispatch(setButtonsUp);
+
+        const { inputEnabled } = this.store.getState();
+
+        if (!inputEnabled) {
+            return;
+        }
+
         const { innerWidth } = window;
         const { x: w, y: h } = this.size;
         const w2 = floor(w / 2.);
-        this.buttons.forEach(a => a.down = false);
 
         if (this.input.inputs.length > 0) {
             const pos = this.input.inputs[0].pos;
             const x = pos.x / innerWidth * WIDTH;
-            const all = this.buttons;
+            const { buttons } = this.store.getState();
 
-            switch (all.length) {
+            switch (buttons.length) {
                 case 1:
-                    this.buttons[0].down = true;
+                    buttons[0].down = true;
                     break;
                 case 2:
                     if (x <= w2 - 15 + 30 * 0) {
-                        this.buttons[0].down = true;
+                        buttons[0].down = true;
                         break;
                     }
 
                     if (x > w2 - 15 + 30 * 1) {
-                        this.buttons[1].down = true;
+                        buttons[1].down = true;
                         break;
                     }
                     break;
                 case 3:
                     if (x < w2 - 15 + 30 * 0) {
-                        this.buttons[0].down = true;
+                        buttons[0].down = true;
                         break;
                     }
 
                     if (x <= w2 - 15 + 30 * 1) {
-                        this.buttons[1].down = true;
+                        buttons[1].down = true;
                         break;
                     }
 
                     if (x > w2 - 15 + 30 * 1) {
-                        this.buttons[2].down = true;
+                        buttons[2].down = true;
                         break;
                     }
                     break;
                 default:
-                    throw new Error(`More buttons than can handle ${all.length}`);
+                    throw new Error(`More buttons than can handle ${buttons.length}`);
             }
         }
     }
@@ -137,8 +135,23 @@ export class Gizmo implements Display {
         const { idle } = this.resources.food;
         const size = idle.getSize();
 
-        this.buttons.forEach(({ type, down }, i, all) => {
-            drawButton(context, this.resources[type].idle, w2 - 45 + 35 * i, h2 + size.y + 15, down);
+        this.store.getState().buttons.forEach(({ type, down }, i, all) => {
+            switch (all.length) {
+                case 1: {
+                    drawButton(context, this.resources[type].idle, w2 - 45 + 35, h2 + size.y + 15, down);
+                    break;
+                }
+                case 2: {
+                    drawButton(context, this.resources[type].idle, w2 - 45 + 35 * i * 2, h2 + size.y + 15, down);
+                    break;
+                }
+                case 3: {
+                    drawButton(context, this.resources[type].idle, w2 - 45 + 35 * i, h2 + size.y + 15, down);
+                    break;
+                }
+                default:
+                    break;
+            }
         });
     }
 }
