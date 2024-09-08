@@ -139,7 +139,10 @@ export class CreatureStateManager {
     }
 
     draw(context: CanvasRenderingContext2D) {
+        context.save();
+        context.translate(this.store.getState().creature.pos.x, 0);
         this.stack[this.stack.length - 1].draw(context);
         this.subStates.forEach(s => s.draw(context));
+        context.restore();
     }
 }
