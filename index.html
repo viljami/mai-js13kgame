@@ -28,12 +28,22 @@
         min-height: 100vh;
         background-color: #000;
       }
+      p {
+        z-index: 9;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+      }
+
+      p, a {
+        color: #fff;
+      }
     </style>
   </head>
   <body>
     <!-- <div id="fps"></div> -->
-    <!-- <p><a href="https://js13kgames.com/">JS13K 2024</a> code: <a href="https://viljamipeltola.com/">Viljami</a>, graphics Marja Siira</p> -->
     <div><canvas id="app"></canvas></div>
+    <p><a href="https://js13kgames.com/">JS13K 2024</a>, design <a href="https://marjasiira.kuvat.fi/kuvat/">Marja</a> & code <a href="https://viljamipeltola.com/">Viljami</a></p>
     <img id="sheet" src="assets/spritesheet_v2.gif" style="display: none;"/>
     <script type="module" src="/src/main.ts"></script>
   </body>
