@@ -62,6 +62,10 @@ export class Timer extends EventEmitter {
         this.time = 0;
     }
 
+    static stop() {
+        Timer.all.forEach(timer => timer.stop());
+    }
+
     static stepAll(dt) {
         Timer.all.forEach(timer => timer.step(dt));
     }

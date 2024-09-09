@@ -289,6 +289,11 @@ export class Store {
             if (nextIndex < levels.path.length) {
                 this.state.creature.evolution = levels.path[nextIndex];
             }
+
+            if (this.state.creature.evolution === Evolution.GROWN) {
+                Timer.stop();
+                this.dispatch(setButtons([]));
+            }
         }
     }
 
