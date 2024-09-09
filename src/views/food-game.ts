@@ -1,13 +1,14 @@
 import { Vec2 } from "../components/vec2";
 import { GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH, GIZMO_SCREEN_WIDTH_HALF } from "../config";
+import { CreatureStateManager } from "../creature/states";
 import { Resources, resourcesService } from "../resources";
-import { Button, eat, setButtons, Store } from "../store";
+import { Button, eat, moveCreature, setButtons, Store } from "../store";
 import { Wave } from "./animations/wave";
 import { NextView, View } from "./view-manager";
 
 const SPAWN_FOOD_DELAY = 2000;
-const GRAVITY_DELAY = 200;
-const MOVE_CREATURE_DELAY = 100;
+const GRAVITY_DELAY = 50;
+const MOVE_CREATURE_DELAY = 40;
 const EAT_CREATURE_DELAY = 200;
 
 const { abs, floor, max, random } = Math;
@@ -25,9 +26,11 @@ export class FoodGameView extends View {
     timeSpawn = 0.;
     exitAnimation = new Wave(Vec2.new(GIZMO_SCREEN_WIDTH_HALF, GIZMO_SCREEN_HEIGHT_HALF));
     isExit = false;
+    creature: CreatureStateManager;
 
-    constructor() {
+    constructor(creature: CreatureStateManager) {
         super();
+        this.creature = creature;
         this.resources = resourcesService.getInstance();
         this.store = Store.getInstance();
     }
@@ -49,7 +52,8 @@ export class FoodGameView extends View {
         this.isExit = false;
         this.exitAnimation.stop();
         this.exitAnimation.reset();
-        this.store.dispatch(setButtons(['left', 'right', 'down']));
+        this.store.dispatch(setButtons(['left', 'down', 'right']));
+        this.store.dispatch(moveCreature(0));
     }
 
     exit() {
@@ -62,10 +66,11 @@ export class FoodGameView extends View {
             return;
         }
 
+        this.creature.handleInput([]);
         const left = buttons[0].down;
-        const right = buttons[1].down;
+        const right = buttons[buttons.length - 1].down;
 
-        if (buttons[buttons.length - 1].down) {
+        if (buttons[1].down) {
             this.exit();
             return;
         }
@@ -144,10 +149,19 @@ export class FoodGameView extends View {
         if (this.isExit) {
             this.exitAnimation.draw(context);
         } else {
-            const state = this.store.getState();
-            const creature = this.resources.creature[state.creature.evolution];
+            if (this.creatureState == 'hungry') {
+                const state = this.store.getState();
+                const creature = this.resources.creature[state.creature.evolution];
+                creature[this.creatureState].draw(context, this.creaturePos.x, this.creaturePos.y, false, 25, 25);
+            } else {
+                context.save();
+                context.translate(this.creaturePos.x, this.creaturePos.y);
+                // context.translate(this.creaturePos.x * 2, this.creaturePos.y * 2);
+                context.scale(.5, .5);
+                this.creature.draw(context);
+                context.restore();
+            }
 
-            creature[this.creatureState].draw(context, this.creaturePos.x, this.creaturePos.y, false, 25, 25);
             this.foods.forEach(a => this.resources.food.idle.draw(context, a.x, a.y, false, 20, 20));
         }
     }

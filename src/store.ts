@@ -62,9 +62,9 @@ export const setButtonsUp = {
 };
 
 const CREATURE_MOVE = "CREATURE_MOVE";
-export const moveCreature = (diff: number) => ({
+export const moveCreature = (to: number) => ({
     type: CREATURE_MOVE,
-    payload: diff
+    payload: to
 });
 const INCREMENT_SICK = "INCREMENT_SICK";
 export const incrementSick = (n: number) => ({

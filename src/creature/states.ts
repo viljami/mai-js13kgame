@@ -36,6 +36,9 @@ export class CreatureStateManager {
         let isFood = false;
         let isNote = false;
         const { evolution, stats, tired, hungry, playful } = state.creature;
+        const isActiveSleep = active instanceof Sleep;
+        const isActivePlay = isActiveSleep ? false : active instanceof Play;
+        const isActiveEat = isActiveSleep || isActivePlay ? false : active instanceof Eat;
 
         for (let { type, down } of buttons) {
             if (down) {
@@ -43,7 +46,7 @@ export class CreatureStateManager {
                     case 'zzz':
                         isDrops = true;
 
-                        if (!(active instanceof Sleep)) {
+                        if (!isActiveSleep) {
                             this.stack.push(new Sleep(this.resources.creature[state.creature.evolution], this.resources, this.store));
                         }
 
@@ -51,14 +54,14 @@ export class CreatureStateManager {
 
                     case 'note':
                         isNote = true;
-                        if (!(active instanceof Play)) {
+                        if (!isActivePlay) {
                             this.stack.push(new Play(this.resources.creature[state.creature.evolution], this.resources, this.store));
                         }
                         break;
 
                     case 'food':
                         isFood = true;
-                        if (!(active instanceof Eat)) {
+                        if (!isActiveEat) {
                             this.stack.push(new Eat(this.resources.creature[state.creature.evolution], this.resources, this.store));
                         }
                         break;
@@ -69,15 +72,15 @@ export class CreatureStateManager {
             }
         }
 
-        if (!isDrops && active instanceof Sleep) {
+        if (!isDrops && isActiveSleep) {
             active.exit();
         }
 
-        if (!isFood && active instanceof Eat) {
+        if (!isFood && isActiveEat) {
             active.exit();
         }
 
-        if (!isNote && active instanceof Play) {
+        if (!isNote && isActivePlay) {
             active.exit();
         }
 
@@ -87,12 +90,14 @@ export class CreatureStateManager {
             newState = null;
         }
 
-        if (tired.percentage >= .5) {
-            newState = new IdleAnd(this.resources.creature[this.evolution], tired, 'tired', 'idleTired');
-        } else if (hungry.percentage >= .3) {
-            newState = new IdleAnd(this.resources.creature[this.evolution], hungry, 'hungry', 'idleHungry');
-        } else if (playful.percentage >= .5) {
-            newState = new IdleAnd(this.resources.creature[this.evolution], playful, 'angry', 'idleAngry');
+        if (newState == null && !isActiveSleep && !isActiveEat && !isActivePlay && !(active instanceof IdleAnd)) {
+            if (tired.percentage >= .5) {
+                newState = new IdleAnd(this.resources.creature[this.evolution], tired, 'tired', 'idleTired');
+            } else if (hungry.percentage >= .3) {
+                newState = new IdleAnd(this.resources.creature[this.evolution], hungry, 'hungry', 'idleHungry');
+            } else if (playful.percentage >= .5) {
+                newState = new IdleAnd(this.resources.creature[this.evolution], playful, 'angry', 'idleAngry');
+            }
         }
 
         if (newState != null) {

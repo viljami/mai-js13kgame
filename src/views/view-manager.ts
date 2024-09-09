@@ -6,7 +6,7 @@ import { GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, WIDTH } 
 import { Vec2 } from "../components/vec2";
 import { InputManager } from "../components/input";
 import { ProgressBar } from "../ui/progress-bar";
-import { levels } from "../creature/levels";
+import { Evolution, levels } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
 
 const VIEW_CHANGE_DELAY = 1000;
@@ -69,6 +69,19 @@ export class ViewManager implements Display, Step {
         }
 
         const state = this.store.getState();
+
+        if (state.creature.evolution === Evolution.GROWN) {
+            if (this.activeViewName != 'main') {
+                this.nextViewName = 'end';
+                // this.setActiveView('main');
+                this.gizmo.disable();
+                this.store.dispatch(setButtons([]));
+            }
+
+            this.views[this.activeViewName].step(dt);
+            return;
+        }
+
         this.progressBar.setValue(state.day.timer.percentage);
 
         this.gizmo.step(dt);

@@ -27,7 +27,7 @@ import { EndView } from './views/end';
 
         const viewManager = new ViewManager(new InputManager());
         viewManager.addView('main', new MainView(viewManager.creatureStateManager));
-        viewManager.addView('foodGame', new FoodGameView());
+        viewManager.addView('foodGame', new FoodGameView(viewManager.creatureStateManager));
         viewManager.addView('end', new EndView(viewManager.creatureStateManager));
         viewManager.setActiveView('main');
 
