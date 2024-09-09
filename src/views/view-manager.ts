@@ -10,6 +10,7 @@ import { levels } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
 
 const VIEW_CHANGE_DELAY = 1000;
+const rand = (n: number) => Math.floor(Math.random() * n);
 
 export interface Step {
     step(dt: number);
@@ -111,6 +112,13 @@ export class ViewManager implements Display, Step {
         context.save();
         context.translate(this.gizmo.size.x / 2 - GIZMO_SCREEN_WIDTH / 2, this.gizmo.size.y / 2 - GIZMO_SCREEN_HEIGHT / 2);
         this.views[this.activeViewName].draw(context);
+
+        context.fillStyle = '#000';
+
+        for (let i = this.store.getState().creature.stats.dirty; i--; i >= 0) {
+            context.fillRect(rand(GIZMO_SCREEN_WIDTH), rand(GIZMO_SCREEN_HEIGHT), 1, 1);
+        }
+
         context.restore();
 
         // Day progress
@@ -122,7 +130,6 @@ export class ViewManager implements Display, Step {
         context.restore();
 
         this.gizmo.draw(context);
-
     }
 
     setActiveView(viewName: string) {

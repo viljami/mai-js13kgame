@@ -66,6 +66,21 @@ export const moveCreature = (diff: number) => ({
     type: CREATURE_MOVE,
     payload: diff
 });
+const INCREMENT_SICK = "INCREMENT_SICK";
+export const incrementSick = (n: number) => ({
+    type: INCREMENT_SICK,
+    payload: n
+});
+const INCREMENT_DIRTY = "INCREMENT_DIRTY";
+export const incrementDirty = (n: number) => ({
+    type: INCREMENT_DIRTY,
+    payload: n
+});
+const SET_END = "SET_END";
+export const setEnd = (end: End) => ({
+    type: SET_END,
+    payload: end
+});
 
 export enum End {
     NOT_YET,
@@ -95,6 +110,7 @@ export type State = {
             played: number,
             slept: number,
             sick: number,
+            dirty: number
         }
     };
 
@@ -137,6 +153,7 @@ export class Store {
                     played: 0,
                     slept: 0,
                     sick: 0,
+                    dirty: 0,
                 }
             },
 
@@ -152,10 +169,31 @@ export class Store {
             console.log("Triggered: state.day.timePassed");
             this.dispatch(incrementDayCount);
         });
+
+        this.state.creature.hungry.on(TIMER_EVENT_NAME, this.onIncSick);
+        this.state.creature.playful.on(TIMER_EVENT_NAME, this.onIncSick);
+        this.state.creature.tired.on(TIMER_EVENT_NAME, this.onIncSick);
+        this.state.creature.dirty.on(TIMER_EVENT_NAME, () => this.dispatch(incrementDirty(1)));
+    }
+
+    onIncSick = () => {
+        this.dispatch(incrementSick(1));
+    };
+
+    isDead() {
+        const { dirty, sick } = this.state.creature.stats;
+
+        if (dirty + sick >= 100) {
+            this.dispatch(setEnd(End.SIMPLY_DEAD));
+        }
     }
 
     dispatch(action: Action) {
         switch (action.type) {
+            case SET_END: {
+                this.state.end = action.payload;
+                break;
+            }
             case CREATURE_MOVE: {
                 this.state.creature.pos.x = action.payload;
                 break;
@@ -164,6 +202,8 @@ export class Store {
                 this.state.day.count += action.payload;
 
                 if (this.state.day.count >= 13) {
+                    this.state.day.count = 13;
+                    this.state.day.timer.stop();
                     this.state.end = Math.random() < 0.5 ?
                         End.BY_HOLE :
                         End.BY_UFO;
@@ -172,18 +212,45 @@ export class Store {
                 break;
             }
             case INCREMENT_SLEEP: {
-                this.state.creature.stats.slept += action.payload;
+                const { stats, tired } = this.state.creature;
+                stats.slept += action.payload;
+                tired.decrement(action.payload);
+                if (stats.sick > 0) {
+                    stats.sick -= tired.value > 0 ? 1 : 0;
+                }
                 this.handleRequirements();
                 break;
             }
             case INCREMENT_EATEN: {
-                this.state.creature.stats.eaten += action.payload;
+                const { stats, hungry } = this.state.creature;
+                stats.eaten += action.payload;
+                hungry.decrement(action.payload);
+                if (stats.sick > 0) {
+                    stats.sick -= hungry.value > 0 ? 1 : 0;
+                }
                 this.handleRequirements();
                 break;
             }
             case INCREMENT_PLAY: {
-                this.state.creature.stats.played += action.payload;
+                const { stats, playful } = this.state.creature;
+                stats.played += action.payload;
+                playful.decrement(action.payload);
+                if (stats.sick > 0) {
+                    stats.sick -= playful.value > 0 ? 1 : 0;
+                }
                 this.handleRequirements();
+                break;
+            }
+            case INCREMENT_SICK: {
+                const { stats } = this.state.creature;
+                stats.sick += action.payload;
+                this.isDead();
+                break;
+            }
+            case INCREMENT_DIRTY: {
+                const { stats } = this.state.creature;
+                stats.dirty += action.payload;
+                this.isDead();
                 break;
             }
             case NOOP: {

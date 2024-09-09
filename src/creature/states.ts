@@ -5,20 +5,9 @@ import { Wave } from "../views/animations/wave";
 import { CreatureState } from "./base";
 import { Eat, Play, Sleep } from "./bubbling";
 import { Idle } from "./idle";
+import { IdleAnd } from "./idleAnd";
+import { Jiggle } from "./jiggle";
 import { Evolution } from "./levels";
-
-export class Eating {
-
-}
-
-export class Tired {
-
-}
-
-export class Playful {
-
-}
-
 
 export class CreatureStateManager {
     stack: CreatureState[] = []; // Last is active
@@ -46,6 +35,7 @@ export class CreatureStateManager {
         let isDrops = false;
         let isFood = false;
         let isNote = false;
+        const { evolution, stats, tired, hungry, playful } = state.creature;
 
         for (let { type, down } of buttons) {
             if (down) {
@@ -91,7 +81,19 @@ export class CreatureStateManager {
             active.exit();
         }
 
-        const newState = active.handleInput();
+        let newState = active.handleInput();
+
+        if (newState instanceof Jiggle && (this.evolution === Evolution.SMALL || this.evolution !== Evolution.BIG)) {
+            newState = null;
+        }
+
+        if (tired.percentage >= .5) {
+            newState = new IdleAnd(this.resources.creature[this.evolution], tired, 'tired', 'idleTired');
+        } else if (hungry.percentage >= .3) {
+            newState = new IdleAnd(this.resources.creature[this.evolution], hungry, 'hungry', 'idleHungry');
+        } else if (playful.percentage >= .5) {
+            newState = new IdleAnd(this.resources.creature[this.evolution], playful, 'angry', 'idleAngry');
+        }
 
         if (newState != null) {
             if (active.isDone()) {

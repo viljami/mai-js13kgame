@@ -16,6 +16,7 @@ export class Timer extends EventEmitter {
     targetValue: number;
     percentage: number;
     running: boolean = false;
+    triggered: boolean = false;
 
     constructor(stepDuration: Millisecond, targetValue: number) {
         super();
@@ -36,11 +37,16 @@ export class Timer extends EventEmitter {
 
             if (this.value >= this.targetValue) {
                 this.value = 0;
+                this.triggered = true;
                 this.trigger(new TimerEvent())
             }
 
             this.percentage = this.value / this.targetValue;
         }
+    }
+
+    decrement(n: number) {
+        this.value = this.value < n ? 0 : this.value - n;
     }
 
     stop() {

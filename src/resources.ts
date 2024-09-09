@@ -14,6 +14,9 @@ export interface CreatureStates extends DisplayAsset {
     sick: Sprite,
     dead: Sprite,
     idleHungry: Sprite,
+    idleTired: Sprite,
+    idleAngry: Sprite,
+    idleSick: Sprite,
 }
 
 export interface Creature {
@@ -71,28 +74,6 @@ export interface Resources {
 }
 
 const create = (): Resources => {
-    // const spritesheet = (() => {
-    //     const canvas = document.createElement("canvas");
-    //     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
-    //     context.fillStyle = '#ffffff';
-    //     context.fillRect(0, 0, 100, 100);
-
-    //     const drawCreature = (x, y, w, h) => {
-    //         // body
-    //         context.fillStyle = '#000000';
-    //         context.fillRect(x, y, w, h);
-    //         // eyes
-    //         context.fillStyle = '#ffffff';
-    //         context.fillRect(x + 5, y + 5, 10, 10);
-    //         context.fillRect(x + w - 15, y + 5, 10, 10);
-    //     };
-
-    //     drawCreature(idleFrames[0].pos.x, idleFrames[0].pos.y, size5050.x, size5050.y);
-    //     drawCreature(idleFrames[1].pos.x + 5 + 1, idleFrames[1].pos.y + 10 + 1, size5050.x - 10, size5050.y - 10);
-
-    //     return canvas;
-    // })();
-
     const size1010 = Vec2.new(20, 20);
     const size5050 = Vec2.new(50, 50);
     const size100100 = Vec2.new(100, 100);
@@ -147,6 +128,9 @@ const create = (): Resources => {
                 sick: new Sprite([new Frame(size5050.x * 5, 0, size5050.x, size5050.y)], spritesheet),
                 dead: new Sprite([new Frame(size5050.x * 7, 0, size5050.x, size5050.y)], spritesheet),
                 idleHungry: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], spritesheet),
+                idleTired: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 3, 0, size5050.x, size5050.y)], spritesheet),
+                idleAngry: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 4, 0, size5050.x, size5050.y)], spritesheet),
+                idleSick: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 5, 0, size5050.x, size5050.y)], spritesheet),
             },
             [Evolution.BIG]: {
                 idle: new Sprite([new Frame(0, size5050.y, size5050.x, size5050.y)], spritesheet),
@@ -156,6 +140,9 @@ const create = (): Resources => {
                 sick: new Sprite([new Frame(size5050.x * 5, size5050.x, size5050.x, size5050.y)], spritesheet),
                 dead: new Sprite([new Frame(size5050.x * 7, size5050.x, size5050.x, size5050.y)], spritesheet),
                 idleHungry: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 2, size5050.x, size5050.x, size5050.y)], spritesheet),
+                idleTired: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 3, size5050.x, size5050.x, size5050.y)], spritesheet),
+                idleAngry: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 4, size5050.x, size5050.x, size5050.y)], spritesheet),
+                idleSick: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 5, size5050.x, size5050.x, size5050.y)], spritesheet),
             },
             [Evolution.GROWN]: {
                 idle: new Sprite([new Frame(50 * 6, 150, size100100.x, size100100.y)], spritesheet),
@@ -168,6 +155,9 @@ const create = (): Resources => {
                 sick: eggIdle,
                 dead: eggIdle,
                 idleHungry: eggIdle,
+                idleTired: eggIdle,
+                idleAngry: eggIdle,
+                idleSick: eggIdle,
             }
         },
         days: [
