@@ -58,6 +58,10 @@ export class FoodGameView extends View {
     }
 
     handleInput(buttons: Button[]): NextView | undefined {
+        if (!buttons.length) {
+            return;
+        }
+
         const left = buttons[0].down;
         const right = buttons[1].down;
 

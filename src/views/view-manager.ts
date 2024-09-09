@@ -90,11 +90,12 @@ export class ViewManager implements Display, Step {
             return;
         }
 
-        if (state.end !== End.NOT_YET) {
+        if (state.end !== End.NOT_YET && (this.activeViewName !== 'end' || this.nextViewName !== 'end')) {
             this.nextViewName = 'end';
+            activeView.exit();
+            // this.setActiveView('end');
             this.gizmo.disable();
             this.store.dispatch(setButtons([]));
-            activeView.exit();
         }
 
         activeView.step(dt);
@@ -113,7 +114,7 @@ export class ViewManager implements Display, Step {
         context.restore();
 
         // Day progress
-        const day = this.resources.days[this.store.getState().day.count];
+        const day = this.resources.days[this.store.getState().day.count - 1];
         day.idle.draw(context, GIZMO_MARGIN, GIZMO_MARGIN / 2, false, 20, 20);
         context.save()
         context.globalCompositeOperation = 'difference';

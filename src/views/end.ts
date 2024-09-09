@@ -4,7 +4,7 @@ import { GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH, GIZM
 import { Evolution, levels } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
 import { Resources, resourcesService, statToAsset } from "../resources";
-import { Button, moveCreature, setButtons, Store, toggleInput } from "../store";
+import { Button, End, moveCreature, setButtons, Store, toggleInput } from "../store";
 import { Wave } from "./animations/wave";
 import { NextView, View } from "./view-manager";
 
@@ -46,14 +46,7 @@ export class EndView extends View {
     }
 
     updateButtons() {
-        const state = this.store.getState();
-        const { evolution } = state.creature;
-        const required = levels.requirements[evolution];
-
-        this.store.dispatch(setButtons(Object
-            .entries(required)
-            .map(([key]) => statToAsset(key))
-            .filter(a => !!a)));
+        this.store.dispatch(setButtons([]));
     }
 
     enter() {
@@ -81,16 +74,36 @@ export class EndView extends View {
 
     draw(context: CanvasRenderingContext2D) {
         const size = this.creatureStateManager.getSize();
-        const { ufoX, ufoY, creatureY, creatureShrink } = this.ufoAnim.value;
 
-        if (creatureShrink > 0.5) {
-            context.save();
-            context.translate(GIZMO_SCREEN_WIDTH / 2 - size.x / 2 * creatureShrink, creatureY);
-            context.scale(creatureShrink, creatureShrink);
-            this.creatureStateManager.draw(context)
-            context.restore();
+        switch (this.store.getState().end) {
+            case End.NOT_YET:
+            case End.BY_GIANT:
+            case End.SIMPLY_DEAD: {
+                context.save();
+                context.translate(GIZMO_SCREEN_WIDTH / 2 - size.x / 2, GIZMO_SCREEN_HEIGHT - size.y);
+                this.creatureStateManager.draw(context)
+                context.restore();
+                break;
+            }
+            case End.BY_UFO:
+            case End.BY_HOLE: {
+                const { ufoX, ufoY, creatureY, creatureShrink } = this.ufoAnim.value;
+
+                if (creatureShrink > 0.5) {
+                    context.save();
+                    context.translate(GIZMO_SCREEN_WIDTH / 2 - size.x / 2 * creatureShrink, creatureY);
+                    context.scale(creatureShrink, creatureShrink);
+                    this.creatureStateManager.draw(context)
+                    context.restore();
+                }
+
+                this.resources.ufo.idle.draw(context, ufoX, ufoY);
+
+                break;
+            }
+
+            default:
+                throw new Error("Unhandled end state");
         }
-
-        this.resources.ufo.idle.draw(context, ufoX, ufoY);
     }
 }

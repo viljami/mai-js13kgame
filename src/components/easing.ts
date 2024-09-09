@@ -59,7 +59,7 @@ export class Easing implements BaseEasing {
     }
 }
 
-abstract class EasingList implements BaseEasing {
+export class SequenceEasing implements BaseEasing {
     easings: Easing[];
 
     constructor(easings: Easing[]) {
@@ -74,12 +74,6 @@ abstract class EasingList implements BaseEasing {
         return this.easings.every(a => a.isDone());
     }
 
-    abstract step(dt);
-
-    abstract getValue(): number;
-}
-
-export class SequenceEasing extends EasingList {
     step(dt) {
         for (let a of this.easings) {
             if (!a.isDone()) {
