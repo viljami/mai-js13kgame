@@ -15,14 +15,14 @@ export const levels = {
         },
         [Evolution.SMALL]: {
             slept: 5,
-            eaten: 5,
             played: 5,
+            eaten: 5,
             timers: ['hungry', 'tired', 'playful']
         },
         [Evolution.BIG]: {
             slept: 10,
-            eaten: 10,
             played: 10,
+            eaten: 10,
             timers: ['hungry', 'tired', 'playful']
         },
         [Evolution.GROWN]: {
