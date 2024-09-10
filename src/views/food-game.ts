@@ -96,6 +96,8 @@ export class FoodGameView extends View {
             this.exitAnimation.step(dt);
         }
 
+        this.creature.step(dt);
+
         this.timeGravity += dt;
         this.timeEat += dt;
         this.timeMove += dt;
@@ -153,7 +155,9 @@ export class FoodGameView extends View {
             if (this.creatureState == 'hungry') {
                 const state = this.store.getState();
                 const creature = this.resources.creature[state.creature.evolution];
-                creature[this.creatureState].draw(context, this.creaturePos.x, this.creaturePos.y, false, 25, 25);
+                if (creature[this.creatureState]) {
+                    creature[this.creatureState].draw(context, this.creaturePos.x, this.creaturePos.y, false, 25, 25);
+                }
             } else {
                 context.save();
                 context.translate(this.creaturePos.x, this.creaturePos.y);
