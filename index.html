@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fear of 13</title>
     <style>
@@ -14,12 +13,10 @@
         height: 100%;
         overflow: hidden;
       }
-
       canvas {
         image-rendering: pixelated;
         background-color: #fff;
       }
-
       div {
         display: flex;
         justify-content: center;
@@ -37,16 +34,12 @@
         margin: 0;
         font-size: 10px;
       }
-
-      p, a {
-        color: #fff;
-      }
+      p, a {color: #fff}
     </style>
   </head>
   <body>
-    <!-- <div id="fps"></div> -->
     <div><canvas id="app"></canvas></div>
-    <p><a href="https://js13kgames.com/">JS13K 2024</a>, <a href="https://marjasiira.kuvat.fi/kuvat/">Marja</a> & <a href="https://viljamipeltola.com/">Viljami</a></p>
+    <p>For <a href="https://js13kgames.com/">js13k</a>: <a href="https://marjasiira.kuvat.fi/kuvat/">Marja</a> & <a href="https://viljamipeltola.com/">Viljami</a></p>
     <img id="sheet" src="assets/spritesheet_v2.gif" style="display: none;"/>
     <script type="module" src="/src/main.ts"></script>
   </body>
