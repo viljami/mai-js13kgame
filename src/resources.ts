@@ -22,7 +22,7 @@ export interface CreatureStates extends CreatureIdle {
 export interface Creature {
     [Evolution.SMALL]: CreatureStates,
     [Evolution.BIG]: CreatureStates,
-    [Evolution.GROWN]: CreatureIdle,
+    [Evolution.GROWN]: { head: Sprite, body: Sprite },
     [Evolution.EGG]: CreatureIdle,
 }
 
@@ -143,7 +143,8 @@ const create = (): Resources => {
                 idleSick: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 5, size5050.x, size5050.x, size5050.y)], spritesheet),
             },
             [Evolution.GROWN]: {
-                idle: new Sprite([new Frame(50 * 6, 150, size100100.x, size100100.y)], spritesheet),
+                head: new Sprite([new Frame(50 * 6, 150, size100100.x, 50)], spritesheet),
+                body: new Sprite([new Frame(50 * 6, 200, size100100.x, 50)], spritesheet),
             },
             [Evolution.EGG]: {
                 idle: eggIdle,

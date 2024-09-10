@@ -1,13 +1,16 @@
 import { Vec2 } from "../components/vec2";
 import { Resources, resourcesService } from "../resources";
-import { Button, End, Store, toggleInput } from "../store";
+import { Button, End, moveCreature, Store, toggleInput } from "../store";
 import { Wave } from "../views/animations/wave";
 import { CreatureState } from "./base";
 import { Eat, Play, Sick, Sleep } from "./bubbling";
+import { Grown } from "./grown";
 import { Idle } from "./idle";
 import { IdleAnd } from "./idleAnd";
 import { Jiggle } from "./jiggle";
 import { Evolution } from "./levels";
+
+const GROWN_SIZE = Vec2.new(100, 100);
 
 export class CreatureStateManager {
     stack: CreatureState[] = []; // Last is active
@@ -26,6 +29,10 @@ export class CreatureStateManager {
     }
 
     getSize(): Vec2 {
+        if (this.evolution === Evolution.GROWN) {
+            return GROWN_SIZE;
+        }
+
         return this.stack[this.stack.length - 1].creature.idle.frames[0].size;
     }
 
@@ -144,8 +151,13 @@ export class CreatureStateManager {
         }
 
         if (this.evolution == Evolution.GROWN) {
-            this.stack.length == 1;
+            this.stack.length = 1;
             this.subStates.length = 0;
+            this.store.dispatch(moveCreature(0));
+
+            if (!(this.stack[0] instanceof Grown)) {
+                this.stack[0] = new Grown(this.resources.creature.small);
+            }
         }
 
         active.step(dt);
