@@ -97,7 +97,7 @@ export class EndView extends View {
                     context.restore();
                 }
 
-                this.resources.ufo.idle.draw(context, ufoX, ufoY);
+                this.resources.ufo.draw(context, ufoX, ufoY);
 
                 break;
             }

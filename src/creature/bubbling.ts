@@ -20,7 +20,7 @@ const createBubbling = (className: string, resourceName: string, creatureLook: s
             this.pos = pos;
             this.targetY = targetY;
             this.easing = new Easing(this.pos.y, targetY, durationMs, easeInOutQuad);
-            this.sprite = resources[resourceName].idle;
+            this.sprite = resources[resourceName];
         }
 
         step(dt: number) {

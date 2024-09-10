@@ -132,21 +132,20 @@ export class Gizmo implements Display {
         // context.globalCompositeOperation = 'difference';
         // context.fillRect(0, 0, w, h);
         // context.restore();
-        const { idle } = this.resources.food;
-        const size = idle.getSize();
+        const size = this.resources.food.getSize();
 
         this.store.getState().buttons.forEach(({ type, down }, i, all) => {
             switch (all.length) {
                 case 1: {
-                    drawButton(context, this.resources[type].idle, w2 - 45 + 35, h2 + size.y + 15, down);
+                    drawButton(context, this.resources[type], w2 - 45 + 35, h2 + size.y + 15, down);
                     break;
                 }
                 case 2: {
-                    drawButton(context, this.resources[type].idle, w2 - 45 + 35 * i * 2, h2 + size.y + 15, down);
+                    drawButton(context, this.resources[type], w2 - 45 + 35 * i * 2, h2 + size.y + 15, down);
                     break;
                 }
                 case 3: {
-                    drawButton(context, this.resources[type].idle, w2 - 45 + 35 * i, h2 + size.y + 15, down);
+                    drawButton(context, this.resources[type], w2 - 45 + 35 * i, h2 + size.y + 15, down);
                     break;
                 }
                 default:

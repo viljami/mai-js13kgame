@@ -136,7 +136,7 @@ export class ViewManager implements Display, Step {
 
         // Day progress
         const day = this.resources.days[this.store.getState().day.count - 1];
-        day.idle.draw(context, GIZMO_MARGIN, GIZMO_MARGIN / 2, false, 20, 20);
+        day.draw(context, GIZMO_MARGIN, GIZMO_MARGIN / 2, false, 20, 20);
         context.save()
         context.globalCompositeOperation = 'difference';
         this.progressBar.draw(context);

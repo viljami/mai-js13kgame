@@ -7,7 +7,7 @@ import { Resources, resourcesService } from "./resources";
 const COUNT_SECONDS = 1000.;
 
 type Action = {
-    type: string,
+    type: number,
     payload: any
 }
 
@@ -16,67 +16,67 @@ export type Button = {
     down: boolean
 };
 
-const INCREMENT_DAY_COUNT = "INCREMENT_DAY_COUNT";
+const INCREMENT_DAY_COUNT = 1;
 const incrementDayCount: Action = {
     type: INCREMENT_DAY_COUNT,
     payload: 1
 };
 
-const INCREMENT_SLEEP = "INCREMENT_SLEEP";
+const INCREMENT_SLEEP = 2;
 export const incrementSleep: Action = {
     type: INCREMENT_SLEEP,
     payload: 1
 };
 
-const INCREMENT_EATEN = "INCREMENT_EATEN";
+const INCREMENT_EATEN = 3;
 export const eat: Action = {
     type: INCREMENT_EATEN,
     payload: 1
 };
 
-const INCREMENT_PLAY = "INCREMENT_PLAY";
+const INCREMENT_PLAY = 4;
 export const play: Action = {
     type: INCREMENT_PLAY,
     payload: 1
 };
 
-const NOOP = "NO-OPERATION";
+const NOOP = 5;
 export const noop = { type: NOOP, payload: undefined }
 
-const SET_BUTTONS = "SET_BUTTONS";
+const SET_BUTTONS = 6;
 export const setButtons = (types: string[]) => ({
     type: SET_BUTTONS,
     payload: types
 });
 
-const TOGGLE_INPUT = "TOGGLE_INPUT";
+const TOGGLE_INPUT = 7;
 export const toggleInput = (enabled = true) => ({
     type: TOGGLE_INPUT,
     payload: enabled
 });
 
-const SET_BUTTONS_UP = "SET_BUTTONS_UP";
+const SET_BUTTONS_UP = 8;
 export const setButtonsUp = {
     type: SET_BUTTONS_UP,
     payload: undefined,
 };
 
-const CREATURE_MOVE = "CREATURE_MOVE";
+const CREATURE_MOVE = 9;
 export const moveCreature = (to: number) => ({
     type: CREATURE_MOVE,
     payload: to
 });
-const INCREMENT_SICK = "INCREMENT_SICK";
+const INCREMENT_SICK = 10;
 export const incrementSick = (n: number) => ({
     type: INCREMENT_SICK,
     payload: n
 });
-const INCREMENT_DIRTY = "INCREMENT_DIRTY";
+const INCREMENT_DIRTY = 11;
 export const incrementDirty = (n: number) => ({
     type: INCREMENT_DIRTY,
     payload: n
 });
-const SET_END = "SET_END";
+const SET_END = 12;
 export const setEnd = (end: End) => ({
     type: SET_END,
     payload: end

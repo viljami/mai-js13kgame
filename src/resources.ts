@@ -3,11 +3,11 @@ import { Sprite } from "./components/sprite";
 import { Vec2 } from "./components/vec2";
 import { Evolution } from "./creature/levels";
 
-export interface DisplayAsset {
-    idle: Sprite
+export type DisplayAsset = Sprite;
+export interface CreatureIdle {
+    idle: Sprite,
 }
-
-export interface CreatureStates extends DisplayAsset {
+export interface CreatureStates extends CreatureIdle {
     hungry: Sprite,
     tired: Sprite,
     angry: Sprite,
@@ -22,8 +22,8 @@ export interface CreatureStates extends DisplayAsset {
 export interface Creature {
     [Evolution.SMALL]: CreatureStates,
     [Evolution.BIG]: CreatureStates,
-    [Evolution.GROWN]: DisplayAsset,
-    [Evolution.EGG]: CreatureStates,
+    [Evolution.GROWN]: CreatureIdle,
+    [Evolution.EGG]: CreatureIdle,
 }
 
 export const statToAsset = (asset) => {
@@ -116,9 +116,7 @@ const create = (): Resources => {
     arrowContext.fill();
 
     return {
-        food: {
-            idle: new Sprite([new Frame(0, size5050.y * 2, size5050.x, size5050.y)], spritesheetTransparent),
-        },
+        food: new Sprite([new Frame(0, size5050.y * 2, size5050.x, size5050.y)], spritesheetTransparent),
         creature: {
             [Evolution.SMALL]: {
                 idle: new Sprite([new Frame(0, 0, size5050.x, size5050.y)], spritesheet),
@@ -149,66 +147,34 @@ const create = (): Resources => {
             },
             [Evolution.EGG]: {
                 idle: eggIdle,
-                hungry: eggIdle,
-                tired: eggIdle,
-                angry: eggIdle,
-                sick: eggIdle,
-                dead: eggIdle,
-                idleHungry: eggIdle,
-                idleTired: eggIdle,
-                idleAngry: eggIdle,
-                idleSick: eggIdle,
             }
         },
         days: [
-            { idle: new Sprite([new Frame(0, size5050.y * 3, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(size5050.x, size5050.y * 3, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(size5050.x * 2, size5050.y * 3, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(0, size5050.y * 4, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(size5050.x, size5050.y * 4, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(size5050.x * 2, size5050.y * 4, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(0, size5050.y * 5, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(size5050.x, size5050.y * 5, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(size5050.x * 2, size5050.y * 5, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(0, size5050.y * 6, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(size5050.x, size5050.y * 6, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(size5050.x * 2, size5050.y * 6, size5050.x, size5050.y)], spritesheet) },
-            { idle: new Sprite([new Frame(0, size5050.y * 7, size5050.x, size5050.y)], spritesheet) },
+            new Sprite([new Frame(0, size5050.y * 3, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(size5050.x, size5050.y * 3, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(size5050.x * 2, size5050.y * 3, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(0, size5050.y * 4, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(size5050.x, size5050.y * 4, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(size5050.x * 2, size5050.y * 4, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(0, size5050.y * 5, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(size5050.x, size5050.y * 5, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(size5050.x * 2, size5050.y * 5, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(0, size5050.y * 6, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(size5050.x, size5050.y * 6, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(size5050.x * 2, size5050.y * 6, size5050.x, size5050.y)], spritesheet),
+            new Sprite([new Frame(0, size5050.y * 7, size5050.x, size5050.y)], spritesheet),
         ],
-        piano: {
-            idle: new Sprite([new Frame(50 * 4, size150100.y, size150100.x, size150100.y)], spritesheet),
-        },
-        medic: {
-            idle: new Sprite([new Frame(size5050.x * 2, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
-        },
-        note: {
-            idle: new Sprite([new Frame(size5050.x * 3, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
-        },
-        drops: {
-            idle: new Sprite([new Frame(size5050.x * 4, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
-        },
-        hole: {
-            idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
-        },
-        ufo: {
-            idle: new Sprite([new Frame(size5050.x * 6, size5050.y * 2, size5050.x, size5050.y)], spritesheetTransparent),
-        },
-        zzz: {
-            idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 3, size1010.x, size1010.y)], spritesheet),
-        },
-        bubble: {
-            idle: new Sprite([new Frame(size5050.x * 5, size5050.y * 3 + 20, size1010.x, size1010.y)], spritesheet),
-        },
-        left: {
-            idle: new Sprite([new Frame(0, 0, size5050.x, size5050.y)], arrowCanvas),
-        },
-        right: {
-            idle: new Sprite([new Frame(size5050.x, 0, size5050.x, size5050.y)], arrowCanvas),
-        },
-        down: {
-            idle: new Sprite([new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], arrowCanvas),
-
-        }
+        piano: new Sprite([new Frame(50 * 4, size150100.y, size150100.x, size150100.y)], spritesheet),
+        medic: new Sprite([new Frame(size5050.x * 2, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
+        note: new Sprite([new Frame(size5050.x * 3, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
+        drops: new Sprite([new Frame(size5050.x * 4, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
+        hole: new Sprite([new Frame(size5050.x * 5, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
+        ufo: new Sprite([new Frame(size5050.x * 6, size5050.y * 2, size5050.x, size5050.y)], spritesheetTransparent),
+        zzz: new Sprite([new Frame(size5050.x * 5, size5050.y * 3, size1010.x, size1010.y)], spritesheet),
+        bubble: new Sprite([new Frame(size5050.x * 5, size5050.y * 3 + 20, size1010.x, size1010.y)], spritesheet),
+        left: new Sprite([new Frame(0, 0, size5050.x, size5050.y)], arrowCanvas),
+        right: new Sprite([new Frame(size5050.x, 0, size5050.x, size5050.y)], arrowCanvas),
+        down: new Sprite([new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], arrowCanvas),
     };
 };
 

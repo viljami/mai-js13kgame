@@ -16,7 +16,7 @@ export class SleepZzz implements Step, Display {
         this.pos = pos;
         this.targetY = targetY;
         this.easing = new Easing(this.pos.y, targetY, durationMs, easeInOutQuad);
-        this.sprite = resources.zzz.idle;
+        this.sprite = resources.zzz;
     }
 
     step(dt: number) {

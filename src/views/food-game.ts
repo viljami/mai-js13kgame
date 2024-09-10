@@ -63,6 +63,7 @@ export class FoodGameView extends View {
 
     handleInput(buttons: Button[]): NextView | undefined {
         if (!buttons.length) {
+            this.exit();
             return;
         }
 
@@ -162,7 +163,7 @@ export class FoodGameView extends View {
                 context.restore();
             }
 
-            this.foods.forEach(a => this.resources.food.idle.draw(context, a.x, a.y, false, 20, 20));
+            this.foods.forEach(a => this.resources.food.draw(context, a.x, a.y, false, 20, 20));
         }
     }
 }
