@@ -183,7 +183,7 @@ export class Store {
     isDead() {
         const { dirty, sick } = this.state.creature.stats;
 
-        if (dirty + sick >= 100) {
+        if (dirty + sick >= 50) {
             this.dispatch(setEnd(End.SIMPLY_DEAD));
         }
     }
@@ -282,16 +282,29 @@ export class Store {
             const index = levels.path.indexOf(this.state.creature.evolution);
             const nextIndex = index + 1;
 
-            this.state.creature.hungry.start();
-            this.state.creature.playful.start();
-            this.state.creature.dirty.start();
-
             if (nextIndex < levels.path.length) {
                 this.state.creature.evolution = levels.path[nextIndex];
+
+                switch (this.state.creature.evolution) {
+                    default:
+                    case Evolution.GROWN:
+                        Timer.stop();
+                        // No break;
+                    case Evolution.EGG:
+                        this.state.creature.tired.start();
+
+                        break;
+                    case Evolution.SMALL:
+                    case Evolution.BIG:
+                        this.state.creature.tired.start();
+                        this.state.creature.hungry.start();
+                        this.state.creature.playful.start();
+                        this.state.creature.dirty.start();
+                        break;
+                }
             }
 
             if (this.state.creature.evolution === Evolution.GROWN) {
-                Timer.stop();
                 this.dispatch(setButtons([]));
             }
         }

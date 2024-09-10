@@ -71,11 +71,17 @@ export class ViewManager implements Display, Step {
         const state = this.store.getState();
 
         if (state.creature.evolution === Evolution.GROWN) {
-            if (this.activeViewName != 'main') {
+            if (this.activeViewName != 'end') {
                 this.nextViewName = 'end';
+                this.views[this.activeViewName].exit();
                 // this.setActiveView('main');
                 this.gizmo.disable();
                 this.store.dispatch(setButtons([]));
+            }
+
+            if (this.views[this.activeViewName].isDone()) {
+                this.activeViewName = 'end';
+                this.views[this.activeViewName].enter();
             }
 
             this.views[this.activeViewName].step(dt);

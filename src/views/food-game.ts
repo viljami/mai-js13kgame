@@ -1,5 +1,6 @@
 import { Vec2 } from "../components/vec2";
 import { GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH, GIZMO_SCREEN_WIDTH_HALF } from "../config";
+import { Evolution } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
 import { Resources, resourcesService } from "../resources";
 import { Button, eat, moveCreature, setButtons, Store } from "../store";
@@ -36,7 +37,7 @@ export class FoodGameView extends View {
     }
 
     isDone() {
-        return this.isExit && this.exitAnimation.isDone();
+        return this.isExit && this.exitAnimation.isDone() || this.store.getState().creature.evolution === Evolution.GROWN;
     }
 
     enter() {
@@ -44,7 +45,7 @@ export class FoodGameView extends View {
         this.creaturePos.y = GIZMO_SCREEN_HEIGHT - 25;
         this.creatureVel.x = 0;
         this.creatureVel.y = 0;
-        this.foods.length = 0;
+        // this.foods.length = 0;
         this.timeEat = 0.;
         this.timeGravity = 1000.; // First spawn earlier
         this.timeMove = 0.;

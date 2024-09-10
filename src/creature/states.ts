@@ -1,9 +1,9 @@
 import { Vec2 } from "../components/vec2";
 import { Resources, resourcesService } from "../resources";
-import { Button, Store, toggleInput } from "../store";
+import { Button, End, Store, toggleInput } from "../store";
 import { Wave } from "../views/animations/wave";
 import { CreatureState } from "./base";
-import { Eat, Play, Sleep } from "./bubbling";
+import { Eat, Play, Sick, Sleep } from "./bubbling";
 import { Idle } from "./idle";
 import { IdleAnd } from "./idleAnd";
 import { Jiggle } from "./jiggle";
@@ -97,6 +97,8 @@ export class CreatureStateManager {
                 newState = new IdleAnd(this.resources.creature[this.evolution], hungry, 'hungry', 'idleHungry');
             } else if (playful.percentage >= .5) {
                 newState = new IdleAnd(this.resources.creature[this.evolution], playful, 'angry', 'idleAngry');
+            } else if (stats.sick > 10) {
+                newState = new Sick(this.resources.creature[this.evolution], this.resources, this.store);
             }
         }
 
@@ -141,15 +143,28 @@ export class CreatureStateManager {
             }
         }
 
+        if (this.evolution == Evolution.GROWN) {
+            this.stack.length == 1;
+            this.subStates.length = 0;
+        }
+
         active.step(dt);
         this.subStates.forEach(s => s.step(dt));
     }
 
     draw(context: CanvasRenderingContext2D) {
+        const state = this.store.getState();
+
         context.save();
-        context.translate(this.store.getState().creature.pos.x, 0);
-        this.stack[this.stack.length - 1].draw(context);
-        this.subStates.forEach(s => s.draw(context));
+
+        if (state.end == End.SIMPLY_DEAD) {
+            this.resources.creature[this.evolution].dead.draw(context, 0, 0);
+        } else {
+            context.translate(state.creature.pos.x, 0);
+            this.stack[this.stack.length - 1].draw(context);
+            this.subStates.forEach(s => s.draw(context));
+        }
+
         context.restore();
     }
 }

@@ -24,19 +24,25 @@ export class IdleAnd extends CreatureState {
     }
 
     step(dt) {
-        this.creature.hungry.step(dt);
+        if (this.creature.hungry) {
+            this.creature.hungry.step(dt);
+        }
+
         const { percentage } = this.timer;
 
         if (percentage > .9) {
             this.creatureState = this.state90Name;
         } else {
             this.creatureState = this.stateName;
-            this.creature[this.creatureState].speed = SPRITE_SPEED * (1.3 - percentage);
+
+            if (this.creature[this.creatureState]) {
+                this.creature[this.creatureState].speed = SPRITE_SPEED * (1.3 - percentage);
+            }
         }
     }
 
     draw(context: CanvasRenderingContext2D) {
-        this.creature[this.creatureState].draw(context, 0, 0);
+        this.creature[this.creatureState]?.draw(context, 0, 0);
     }
 
     isDone(): boolean {
