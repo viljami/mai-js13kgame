@@ -24,7 +24,7 @@ export class FoodGameView extends View {
     timeEat = 0.;
     timeGravity = 1000.;
     timeMove = 0.;
-    timeSpawn = 0.;
+    timeSpawn = SPAWN_FOOD_DELAY;
     exitAnimation = new Wave(Vec2.new(GIZMO_SCREEN_WIDTH_HALF, GIZMO_SCREEN_HEIGHT_HALF));
     isExit = false;
     creature: CreatureStateManager;
@@ -49,7 +49,7 @@ export class FoodGameView extends View {
         this.timeEat = 0.;
         this.timeGravity = 1000.; // First spawn earlier
         this.timeMove = 0.;
-        this.timeSpawn = 0.;
+        this.timeSpawn = SPAWN_FOOD_DELAY;
         this.isExit = false;
         this.exitAnimation.stop();
         this.exitAnimation.reset();
@@ -118,7 +118,7 @@ export class FoodGameView extends View {
             this.timeMove = 0.;
             this.creaturePos.x += this.creatureVel.x;
 
-            if (this.creaturePos.x >= GIZMO_SCREEN_WIDTH) {
+            if (this.creaturePos.x >= GIZMO_SCREEN_WIDTH - 25) {
                 this.creaturePos.x--;
             }
 
