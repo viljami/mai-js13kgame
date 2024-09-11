@@ -42,7 +42,7 @@ export class CreatureStateManager {
         let isDrops = false;
         let isFood = false;
         let isNote = false;
-        const { evolution, stats, tired, hungry, playful } = state.creature;
+        const { stats, tired, hungry, playful } = state.creature;
         const isActiveSleep = active instanceof Sleep;
         const isActivePlay = isActiveSleep ? false : active instanceof Play;
         const isActiveEat = isActiveSleep || isActivePlay ? false : active instanceof Eat;
@@ -93,19 +93,21 @@ export class CreatureStateManager {
 
         let newState = active.handleInput();
 
-        if (newState instanceof Jiggle && (this.evolution === Evolution.SMALL || this.evolution !== Evolution.BIG)) {
+        if (this.evolution !== Evolution.EGG && newState instanceof Jiggle) {
             newState = null;
         }
 
-        if (newState == null && !isActiveSleep && !isActiveEat && !isActivePlay && !(active instanceof IdleAnd)) {
-            if (tired.percentage >= .5) {
-                newState = new IdleAnd(this.resources.creature[this.evolution], tired, 'tired', 'idleTired');
-            } else if (hungry.percentage >= .3) {
-                newState = new IdleAnd(this.resources.creature[this.evolution], hungry, 'hungry', 'idleHungry');
-            } else if (playful.percentage >= .5) {
-                newState = new IdleAnd(this.resources.creature[this.evolution], playful, 'angry', 'idleAngry');
-            } else if (stats.sick > 10) {
-                newState = new Sick(this.resources.creature[this.evolution], this.resources, this.store);
+        if (this.evolution === Evolution.SMALL || this.evolution === Evolution.BIG) {
+            if (newState == null && !isActiveSleep && !isActiveEat && !isActivePlay && !(active instanceof IdleAnd)) {
+                if (tired.percentage >= .5) {
+                    newState = new IdleAnd(this.resources.creature[this.evolution], tired, 'tired', 'idleTired');
+                } else if (hungry.percentage >= .3) {
+                    newState = new IdleAnd(this.resources.creature[this.evolution], hungry, 'hungry', 'idleHungry');
+                } else if (playful.percentage >= .5) {
+                    newState = new IdleAnd(this.resources.creature[this.evolution], playful, 'angry', 'idleAngry');
+                } else if (stats.sick > 10) {
+                    newState = new Sick(this.resources.creature[this.evolution], this.resources, this.store);
+                }
             }
         }
 
@@ -170,7 +172,7 @@ export class CreatureStateManager {
         context.save();
 
         if (state.end == End.SIMPLY_DEAD) {
-            this.resources.creature[this.evolution].dead.draw(context, 0, 0);
+            this.resources.creature[this.evolution]?.dead.draw(context, 0, 0);
         } else {
             context.translate(state.creature.pos.x, 0);
             this.stack[this.stack.length - 1].draw(context);

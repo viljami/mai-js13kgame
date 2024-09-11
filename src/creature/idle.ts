@@ -21,7 +21,7 @@ export class Idle extends CreatureState {
     }
 
     step(dt) {
-        this.creature.idle.step(dt);
+        this.creature.idle?.step(dt);
         this.jiggleWait += dt;
     }
 

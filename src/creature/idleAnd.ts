@@ -24,10 +24,6 @@ export class IdleAnd extends CreatureState {
     }
 
     step(dt) {
-        if (this.creature.hungry) {
-            this.creature.hungry.step(dt);
-        }
-
         const { percentage } = this.timer;
 
         if (percentage > .9) {
@@ -39,6 +35,8 @@ export class IdleAnd extends CreatureState {
                 this.creature[this.creatureState].speed = SPRITE_SPEED * (1.3 - percentage);
             }
         }
+
+        this.creature[this.creatureState]?.step(dt);
     }
 
     draw(context: CanvasRenderingContext2D) {
