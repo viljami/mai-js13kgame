@@ -10,6 +10,8 @@ export const easeOutQuad = (x: number): number => 1 - (1 - x) * (1 - x);
 
 export const easeLinear = (x: number): number => x;
 
+export const easeJump = (x: number): number => x < 0.5 ? 0. : 1.;
+
 type EasingFn = (x: number) => number;
 
 export interface BaseEasing {

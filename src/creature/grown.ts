@@ -1,10 +1,13 @@
 import { CreatureState } from "./base";
-import { easeLinear, Easing, SequenceEasing } from "../components/easing";
+import { easeJump, Easing, SequenceEasing } from "../components/easing";
 import { resourcesService } from "../resources";
 
 export class Grown extends CreatureState {
     headJiggleAnim = new SequenceEasing([
-        new Easing(0, 1, 1000, easeLinear),
+        new Easing(0, 5, 1000, easeJump),
+        new Easing(5, 0, 1000, easeJump),
+        new Easing(0, -5, 1000, easeJump),
+        new Easing(-5, 0, 1000, easeJump),
     ]);
     resources = resourcesService.getInstance();
 
