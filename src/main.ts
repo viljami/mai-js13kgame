@@ -16,8 +16,11 @@ import { EndView } from './views/end';
         const resize = () => {
             const { innerWidth, innerHeight } = window;
             const a = innerWidth < innerHeight ? innerWidth : innerHeight;
-            canvas.style.width = `${a}px`;
-            canvas.style.height = `${a}px`;
+            const d = Math.floor(a / WIDTH);
+            canvas.width = WIDTH;
+            canvas.height = HEIGHT;
+            canvas.style.width = `${d * WIDTH}px`;
+            canvas.style.height = `${d * HEIGHT}px`;
         };
         resize();
         window.addEventListener('resize', resize);

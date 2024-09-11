@@ -1,9 +1,9 @@
 import { Vec2 } from "./components/vec2";
 
 const { floor } = Math;
-export const WIDTH = 200;
-export const HEIGHT = WIDTH;
 export const GIZMO_MARGIN = 40;
+export const WIDTH = 200 + GIZMO_MARGIN * 2;
+export const HEIGHT = 80 + GIZMO_MARGIN * 2;
 export const GIZMO_SCREEN_WIDTH = WIDTH - GIZMO_MARGIN * 2;
 export const GIZMO_SCREEN_HEIGHT = HEIGHT - GIZMO_MARGIN * 2;
 export const GIZMO_SCREEN_WIDTH_HALF = floor(GIZMO_SCREEN_WIDTH / 2);
