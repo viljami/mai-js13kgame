@@ -46,7 +46,7 @@ export class Sprite {
 
         if (invert) {
             context.save()
-            context.fillStyle = 'white';
+            context.fillStyle = '#fff';
             context.globalCompositeOperation = 'difference';
             context.fillRect(x, y, dw, dh);
             context.restore();

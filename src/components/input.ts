@@ -12,7 +12,7 @@ export class Input {
     }
 }
 
-const KEYBOARD_EVENT_ID = 99999999;
+const KEYBOARD_EVENT_ID = 9999;
 
 export class InputManager {
     inputs: Input[] = [];
@@ -21,6 +21,7 @@ export class InputManager {
         const { body } = document;
         document.addEventListener('contextmenu', this.disableContextMenu);
         body.addEventListener("keydown", this.onKeyDown);
+        body.addEventListener("keyup", this.onKeyUp);
         body.addEventListener("pointerdown", this.onPointerDown);
         body.addEventListener("pointermove", this.onPointerUp);
         body.addEventListener("pointerup", this.onPointerUp);
@@ -33,6 +34,7 @@ export class InputManager {
     disable() {
         const { body } = document;
         document.removeEventListener('contextmenu', this.disableContextMenu);
+        body.removeEventListener("keydown", this.onKeyDown);
         body.removeEventListener("keyup", this.onKeyUp);
         body.removeEventListener("pointerdown", this.onPointerDown);
         body.removeEventListener("pointermove", this.onPointerUp);
@@ -47,16 +49,16 @@ export class InputManager {
         event.preventDefault();
     };
 
-    onKeyDown = ({ key }: KeyboardEvent) => {
-        switch (key) {
-            case "ArrowLeft":
-                this.inputs[0] = new Input(KEYBOARD_EVENT_ID, Vec2.new(0, 0), 0);
+    onKeyDown = ({ keyCode }: KeyboardEvent) => {
+        switch (keyCode) {
+            case 37:
+                this.inputs[0] = new Input(KEYBOARD_EVENT_ID + keyCode, Vec2.new(0, 0), 0);
                 break;
-            case "ArrowRight":
-                this.inputs[0] = new Input(KEYBOARD_EVENT_ID + 1, Vec2.new(window.innerWidth, 0), 0);
+            case 39:
+                this.inputs[0] = new Input(KEYBOARD_EVENT_ID + keyCode, Vec2.new(window.innerWidth, 0), 0);
                 break;
-            case "ArrowDown":
-                this.inputs[0] = new Input(KEYBOARD_EVENT_ID + 2, Vec2.new(window.innerWidth / 2, 0), 0);
+            case 40:
+                this.inputs[0] = new Input(KEYBOARD_EVENT_ID + keyCode, Vec2.new(window.innerWidth / 2, 0), 0);
                 break;
             default:
                 this.inputs.length = 0;
@@ -64,22 +66,8 @@ export class InputManager {
         }
     }
 
-    onKeyUp = ({ key }: KeyboardEvent) => {
-        let index = -1;
-
-        switch (key) {
-            case "ArrowLeft":
-                index = this.inputs.findIndex(({ id }) => id == KEYBOARD_EVENT_ID);
-                break;
-            case "ArrowRight":
-                index = this.inputs.findIndex(({ id }) => id == KEYBOARD_EVENT_ID + 1);
-                break;
-            case "ArrowDown":
-                index = this.inputs.findIndex(({ id }) => id == KEYBOARD_EVENT_ID + 2);
-                break;
-            default:
-                break;
-        }
+    onKeyUp = ({ keyCode }: KeyboardEvent) => {
+        let index = this.inputs.findIndex(({ id }) => id == KEYBOARD_EVENT_ID + keyCode);
 
         if (index != -1) {
             this.inputs.splice(index, 1);
@@ -93,7 +81,6 @@ export class InputManager {
         const { x, y, pointerId, timeStamp } = e;
         // this.inputs.push(new Input(pointerId, Vec2.new(x, y), timeStamp));
         this.inputs[0] =new Input(pointerId, Vec2.new(x, y), timeStamp);
-        return false;
     }
 
     onPointerUp = ({ pointerId }: PointerEvent) => {
