@@ -2,7 +2,7 @@ import { Display } from "../ui/display";
 import { Gizmo } from "../ui/gismo";
 import { Resources, resourcesService } from "../resources";
 import { Button, End, setButtons, Store } from "../store";
-import { GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, WIDTH } from '../config';
+import { DEBUG_MODE, GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, WIDTH } from '../config';
 import { Vec2 } from "../components/vec2";
 import { InputManager } from "../components/input";
 import { ProgressBar } from "../ui/progress-bar";
@@ -22,13 +22,13 @@ export interface InputHandler {
 
 export abstract class View implements Display, Step, InputHandler {
     step(dt: number) {
-        throw new Error("Method not implemented.");
+        if (DEBUG_MODE) throw new Error("Method not implemented.");
     }
 
     abstract handleInput(buttons: Button[]): NextView | undefined;
 
     draw(context: CanvasRenderingContext2D) {
-        throw new Error("Method not implemented.");
+        if (DEBUG_MODE) throw new Error("Method not implemented.");
     }
 
     enter() { }

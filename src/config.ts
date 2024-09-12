@@ -1,6 +1,7 @@
 import { Vec2 } from "./components/vec2";
 
 const { floor } = Math;
+export const DEBUG_MODE = false;
 export const GIZMO_MARGIN = 40;
 export const WIDTH = 200 + GIZMO_MARGIN * 2;
 export const HEIGHT = 80 + GIZMO_MARGIN * 2;

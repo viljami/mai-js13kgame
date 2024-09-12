@@ -1,5 +1,5 @@
 import { easeInOutQuad, easeInQuad, easeLinear, easeOutQuad, Easing, ParallelEasing, SequenceEasing } from "../components/easing";
-import { GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH, GIZMO_SCREEN_WIDTH_HALF } from "../config";
+import { DEBUG_MODE, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH, GIZMO_SCREEN_WIDTH_HALF } from "../config";
 import { CreatureStateManager } from "../creature/states";
 import { Resources, resourcesService } from "../resources";
 import { Button, End, setButtons, Store } from "../store";
@@ -100,7 +100,7 @@ export class EndView extends View {
             }
 
             default:
-                throw new Error("Unhandled end state");
+                if (DEBUG_MODE) throw new Error("Unhandled end state");
         }
     }
 }

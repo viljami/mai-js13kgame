@@ -1,4 +1,5 @@
 import { Vec2 } from "../components/vec2"
+import { DEBUG_MODE } from "../config";
 import { Display } from "./display";
 
 export type Percentage = number;
@@ -15,11 +16,11 @@ export class ProgressBar implements Display {
 
     setValue(value: Percentage) {
         if (this.value < 0) {
-            throw new Error("Value below zero");
+            if (DEBUG_MODE) throw new Error("Value below zero");
         }
 
         if (this.value > 1) {
-            throw new Error("Value above one");
+            if (DEBUG_MODE) throw new Error("Value above one");
         }
 
         this.value = value;

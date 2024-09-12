@@ -1,4 +1,4 @@
-import { BUTTON_HEIGHT, BUTTON_WIDTH, GIZMO_EARS_SIZE, GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, WIDTH } from "../config";
+import { BUTTON_HEIGHT, BUTTON_WIDTH, DEBUG_MODE, GIZMO_EARS_SIZE, GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, WIDTH } from "../config";
 import { Resources, resourcesService } from "../resources";
 import { Input, InputManager } from "../components/input";
 import { Sprite } from "../components/sprite";
@@ -107,7 +107,7 @@ export class Gizmo implements Display {
                     }
                     break;
                 default:
-                    throw new Error(`More buttons than can handle ${buttons.length}`);
+                    if (DEBUG_MODE) throw new Error(`More buttons than can handle ${buttons.length}`);
             }
         }
     }

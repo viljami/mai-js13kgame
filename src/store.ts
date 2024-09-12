@@ -1,6 +1,6 @@
 import { Timer, TIMER_EVENT_NAME } from "./components/timer";
 import { Vec2 } from "./components/vec2";
-import { DAY_DURATION, DIRTY_TIME_MAX, HUNGRY_TIME_MAX, PLAYFUL_TIME_MAX, TIRED_TIME_MAX } from "./config";
+import { DAY_DURATION, DIRTY_TIME_MAX, DEBUG_MODE, HUNGRY_TIME_MAX, PLAYFUL_TIME_MAX, TIRED_TIME_MAX } from "./config";
 import { Evolution, levels } from "./creature/levels";
 import { Resources, resourcesService } from "./resources";
 
@@ -269,7 +269,7 @@ export class Store {
                 break;
             }
             default:
-                throw new Error(`No such action handler for ${action.type}`)
+                if (DEBUG_MODE) throw new Error(`No such action handler for ${action.type}`)
         }
     }
 

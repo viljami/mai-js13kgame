@@ -1,6 +1,7 @@
 import { Frame } from "./components/frame";
 import { Sprite } from "./components/sprite";
 import { Vec2 } from "./components/vec2";
+import { DEBUG_MODE } from "./config";
 import { Evolution } from "./creature/levels";
 
 export type DisplayAsset = Sprite;
@@ -37,22 +38,7 @@ export const statToAsset = (asset) => {
         case 'timers':
             return;
         default:
-            throw new Error(`No mapping for asset '${asset}'`);
-    }
-};
-
-export const assetToStat = (stat) => {
-    switch (stat) {
-        case 'zzz':
-            return 'slept';
-        case 'note':
-            return 'played';
-        case 'food':
-            return 'eaten';
-        case 'timers':
-            return;
-        default:
-            throw new Error(`No mapping for stat '${stat}'`);
+            if (DEBUG_MODE) throw new Error(`No mapping for asset '${asset}'`);
     }
 };
 
