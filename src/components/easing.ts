@@ -1,8 +1,6 @@
-const { pow } = Math;
-
 // https://easings.net/#easeInOutQuad
 export const easeInOutQuad = (x: number): number => // 0 <= x <= 1
-    x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
+    x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
 
 export const easeInQuad = (x: number): number => x * x;
 

@@ -1,16 +1,17 @@
 import { easeInOutQuad, Easing, ParallelEasing, SequenceEasing } from "../../components/easing";
 import { Vec2 } from "../../components/vec2";
 import { GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH_HALF } from "../../config";
-import { Anim } from "./anim";
 
 const { floor } = Math;
 const WAVE_PHASE_DURATION = 250;
 
-export class Wave extends Anim {
+export class Wave {
+    easings: ParallelEasing;
+    isStopped = false;
     size: Vec2;
 
     constructor(size: Vec2) {
-        super(new ParallelEasing({
+        this.easings = new ParallelEasing({
             dx: new SequenceEasing([
                 new Easing(size.x, size.x, WAVE_PHASE_DURATION, easeInOutQuad),
                 new Easing(0, 0, WAVE_PHASE_DURATION, easeInOutQuad),
@@ -21,7 +22,31 @@ export class Wave extends Anim {
                 new Easing(0, 0, WAVE_PHASE_DURATION, easeInOutQuad),
                 new Easing(size.y, size.y, WAVE_PHASE_DURATION, easeInOutQuad),
             ])
-        }));
+        });
+    }
+
+    reset() {
+        this.easings.reset()
+    }
+
+    start() {
+        this.isStopped = false;
+    }
+
+    stop() {
+        this.isStopped = true;
+    }
+
+    isDone() {
+        return this.easings.isDone();
+    }
+
+    step(dt: number) {
+        if (this.isStopped) {
+            return;
+        }
+
+        this.easings.step(dt);
     }
 
     draw(context: CanvasRenderingContext2D): void {

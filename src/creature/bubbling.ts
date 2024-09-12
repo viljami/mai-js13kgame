@@ -26,7 +26,7 @@ const createBubbling = (className: string, resourceName: string, creatureLook: s
         step(dt: number) {
             this.time += dt;
             this.easing.step(dt);
-            this.pos.x += 5 * Math.sin(this.time / 10000);
+            this.pos.x += 2 * Math.sin(this.time / this.easing.durationMs * Math.PI * 3);
             this.pos.y = this.easing.getValue();
         }
 
@@ -52,7 +52,7 @@ const createBubbling = (className: string, resourceName: string, creatureLook: s
             super(creature);
             this.resources = resources;
             this.store = store;
-            this.bubbling.push(new BubblingItem(resources, Vec2.new(15, 30), -50, 700));
+            this.bubbling.push(new BubblingItem(resources, Vec2.new(15, -15), -40, 700));
         }
 
         exit() {
@@ -66,7 +66,7 @@ const createBubbling = (className: string, resourceName: string, creatureLook: s
 
             if (!this.stopped && this.time >= 400) {
                 this.time = 0;
-                this.bubbling.push(new BubblingItem(this.resources, Vec2.new(15, 30), -50, 700));
+                this.bubbling.push(new BubblingItem(this.resources, Vec2.new(15, -15), -40, 700));
                 this.store.dispatch(storeDispatch);
             }
         }
