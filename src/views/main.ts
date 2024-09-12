@@ -4,7 +4,7 @@ import { GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH, GIZM
 import { Evolution, levels } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
 import { Resources, resourcesService, statToAsset } from "../resources";
-import { Button, moveCreature, setButtons, Store, toggleInput } from "../store";
+import { Button, moveCreature, setButtons, Store } from "../store";
 import { Wave } from "./animations/wave";
 import { NextView, View } from "./view-manager";
 

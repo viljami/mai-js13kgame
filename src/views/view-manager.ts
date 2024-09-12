@@ -1,15 +1,14 @@
 import { Display } from "../ui/display";
 import { Gizmo } from "../ui/gismo";
-import { Resources, resourcesService, statToAsset } from "../resources";
+import { Resources, resourcesService } from "../resources";
 import { Button, End, setButtons, Store } from "../store";
 import { GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, WIDTH } from '../config';
 import { Vec2 } from "../components/vec2";
 import { InputManager } from "../components/input";
 import { ProgressBar } from "../ui/progress-bar";
-import { Evolution, levels } from "../creature/levels";
+import { Evolution } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
 
-const VIEW_CHANGE_DELAY = 1000;
 const rand = (n: number) => Math.floor(Math.random() * n);
 
 export interface Step {

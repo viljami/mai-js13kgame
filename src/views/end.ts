@@ -1,11 +1,8 @@
 import { easeInOutQuad, easeInQuad, easeLinear, easeOutQuad, Easing, ParallelEasing, SequenceEasing } from "../components/easing";
-import { Vec2 } from "../components/vec2";
 import { GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH, GIZMO_SCREEN_WIDTH_HALF } from "../config";
-import { Evolution, levels } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
-import { Resources, resourcesService, statToAsset } from "../resources";
-import { Button, End, moveCreature, setButtons, Store, toggleInput } from "../store";
-import { Wave } from "./animations/wave";
+import { Resources, resourcesService } from "../resources";
+import { Button, End, setButtons, Store } from "../store";
 import { NextView, View } from "./view-manager";
 
 export const VIEW_EXIT_DURATION = 2000.;
