@@ -149,7 +149,7 @@ const create = (): Resources => {
             [0, size5050.y * 6, size5050.x, size5050.y],
             [size5050.x, size5050.y * 6, size5050.x, size5050.y],
             [size5050.x * 2, size5050.y * 6, size5050.x, size5050.y],
-            [0, size5050.y * 7, size5050.x, size5050.y],
+            [size5050.x, size5050.y * 7, size5050.x, size5050.y],
         ].map(([x, y, w, h]) => new Sprite([new Frame(x, y, w, h)], spritesheet)),
         piano: new Sprite([new Frame(50 * 4, size150100.y, size150100.x, size150100.y)], spritesheet),
         medic: new Sprite([new Frame(size5050.x * 2, size5050.y * 2, size5050.x, size5050.y)], spritesheet),

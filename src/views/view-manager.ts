@@ -5,7 +5,6 @@ import { Button, End, setButtons, Store } from "../store";
 import { DEBUG_MODE, GIZMO_MARGIN, GIZMO_SCREEN_HEIGHT, GIZMO_SCREEN_WIDTH, HEIGHT, WIDTH } from '../config';
 import { Vec2 } from "../components/vec2";
 import { InputManager } from "../components/input";
-import { ProgressBar } from "../ui/progress-bar";
 import { Evolution } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
 
@@ -46,7 +45,6 @@ export class ViewManager implements Display, Step {
     resources: Resources;
     store: Store;
     gizmo: Gizmo;
-    progressBar = new ProgressBar(Vec2.new(GIZMO_MARGIN, GIZMO_MARGIN / 2), Vec2.new(20, 20));
     creatureStateManager: CreatureStateManager;
     nextViewName = '';
 
@@ -86,8 +84,6 @@ export class ViewManager implements Display, Step {
             this.views[this.activeViewName].step(dt);
             return;
         }
-
-        this.progressBar.setValue(state.day.timer.percentage);
 
         this.gizmo.step(dt);
 
@@ -142,10 +138,6 @@ export class ViewManager implements Display, Step {
         // Day progress
         const day = this.resources.days[this.store.getState().day.count - 1];
         day.draw(context, GIZMO_MARGIN, GIZMO_MARGIN / 2, false, 20, 20);
-        context.save()
-        context.globalCompositeOperation = 'difference';
-        this.progressBar.draw(context);
-        context.restore();
 
         this.gizmo.draw(context);
     }
