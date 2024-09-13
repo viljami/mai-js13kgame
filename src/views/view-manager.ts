@@ -8,7 +8,7 @@ import { InputManager } from "../components/input";
 import { Evolution } from "../creature/levels";
 import { CreatureStateManager } from "../creature/states";
 
-const rand = (n: number) => Math.floor(Math.random() * n);
+const rand = (n: number) => (Math.random() * n)|0;
 
 export interface Step {
     step(dt: number);
@@ -130,7 +130,7 @@ export class ViewManager implements Display, Step {
         context.fillStyle = '#000';
 
         for (let i = this.store.getState().creature.stats.dirty; i--; i >= 0) {
-            context.fillRect(rand(GIZMO_SCREEN_WIDTH), rand(GIZMO_SCREEN_HEIGHT), 1, 1);
+            context.fillRect(rand(GIZMO_SCREEN_WIDTH)|0, rand(GIZMO_SCREEN_HEIGHT)|0, 1, 1);
         }
 
         context.restore();

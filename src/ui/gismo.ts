@@ -7,14 +7,14 @@ import { Display } from "./display";
 import { Evolution, levels } from "../creature/levels";
 import { setButtonsUp, Store } from "../store";
 
-const { floor, PI } = Math;
+const { PI } = Math;
 const PI2 = PI * 2.;
 const cornersTop = [8, 8, 0, 0];
 const cornersBottom = [0, 0, 8, 8];
 
 const drawButton = (context: CanvasRenderingContext2D, sprite: Sprite, x: number, y: number, active = false) => {
     context.fillStyle = '#fff';
-    context.fillRect(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+    context.fillRect(x|0, y|0, BUTTON_WIDTH|0, BUTTON_HEIGHT|0);
 
     sprite.draw(context, x, y, active, BUTTON_WIDTH, BUTTON_HEIGHT);
 }
@@ -68,7 +68,7 @@ export class Gizmo implements Display {
 
         const { innerWidth } = window;
         const { x: w, y: h } = this.size;
-        const w2 = floor(w / 2.);
+        const w2 = w / 2|0;
 
         if (this.input.inputs.length > 0) {
             const pos = this.input.inputs[0].pos;
@@ -114,9 +114,8 @@ export class Gizmo implements Display {
 
     draw(context: CanvasRenderingContext2D) {
         const { x: w, y: h } = this.size;
-        const w2 = floor(w / 2.);
-        const h2 = floor(h / 2.);
-        const r = w < h ? w2 : h2;
+        const w2 = w / 2.|0;
+        const h2 = h / 2.|0;
 
         // Screen
         context.fillStyle = "#000";

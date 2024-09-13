@@ -46,10 +46,7 @@ export interface Resources {
     food: DisplayAsset,
     creature: Creature,
     days: DisplayAsset[],
-    piano: DisplayAsset,
-    medic: DisplayAsset,
     note: DisplayAsset,
-    drops: DisplayAsset,
     hole: DisplayAsset,
     ufo: DisplayAsset,
     zzz: DisplayAsset,
@@ -64,7 +61,7 @@ const create = (): Resources => {
     const size5050 = Vec2.new(50, 50);
     const size100100 = Vec2.new(100, 100);
     const size150100 = Vec2.new(100, 150);
-    const spritesheet = document.getElementById("sheet") as HTMLImageElement;
+    const spritesheet = document.querySelector("img") as HTMLImageElement;
     const canvas = document.createElement('canvas');
     canvas.width = spritesheet.width;
     canvas.height = spritesheet.height;
@@ -110,7 +107,7 @@ const create = (): Resources => {
                 tired: new Sprite([new Frame(size5050.x * 3, 0, size5050.x, size5050.y)], spritesheet),
                 angry: new Sprite([new Frame(size5050.x * 4, 0, size5050.x, size5050.y)], spritesheet),
                 sick: new Sprite([new Frame(size5050.x * 5, 0, size5050.x, size5050.y)], spritesheet),
-                dead: new Sprite([new Frame(size5050.x * 7, 0, size5050.x, size5050.y)], spritesheet),
+                dead: new Sprite([new Frame(size5050.x * 6, 0, size5050.x, size5050.y)], spritesheet),
                 idleHungry: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], spritesheet),
                 idleTired: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 3, 0, size5050.x, size5050.y)], spritesheet),
                 idleAngry: new Sprite([new Frame(0, 0, size5050.x, size5050.y), new Frame(size5050.x * 4, 0, size5050.x, size5050.y)], spritesheet),
@@ -122,15 +119,15 @@ const create = (): Resources => {
                 tired: new Sprite([new Frame(size5050.x * 3, size5050.x, size5050.x, size5050.y)], spritesheet),
                 angry: new Sprite([new Frame(size5050.x * 4, size5050.x, size5050.x, size5050.y)], spritesheet),
                 sick: new Sprite([new Frame(size5050.x * 5, size5050.x, size5050.x, size5050.y)], spritesheet),
-                dead: new Sprite([new Frame(size5050.x * 7, size5050.x, size5050.x, size5050.y)], spritesheet),
+                dead: new Sprite([new Frame(size5050.x * 6, size5050.x, size5050.x, size5050.y)], spritesheet),
                 idleHungry: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 2, size5050.x, size5050.x, size5050.y)], spritesheet),
                 idleTired: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 3, size5050.x, size5050.x, size5050.y)], spritesheet),
                 idleAngry: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 4, size5050.x, size5050.x, size5050.y)], spritesheet),
                 idleSick: new Sprite([new Frame(0, size5050.x, size5050.x, size5050.y), new Frame(size5050.x * 5, size5050.x, size5050.x, size5050.y)], spritesheet),
             },
             [Evolution.GROWN]: {
-                head: new Sprite([new Frame(50 * 6, 150, size100100.x, 50)], spritesheet),
-                body: new Sprite([new Frame(50 * 6, 200, size100100.x, 50)], spritesheet),
+                head: new Sprite([new Frame(50 * 5, 150, size100100.x, 50)], spritesheet),
+                body: new Sprite([new Frame(50 * 5, 200, size100100.x, 50)], spritesheet),
             },
             [Evolution.EGG]: {
                 idle: eggIdle,
@@ -146,19 +143,16 @@ const create = (): Resources => {
             [0, size5050.y * 5, size5050.x, size5050.y],
             [size5050.x, size5050.y * 5, size5050.x, size5050.y],
             [size5050.x * 2, size5050.y * 5, size5050.x, size5050.y],
-            [0, size5050.y * 6, size5050.x, size5050.y],
-            [size5050.x, size5050.y * 6, size5050.x, size5050.y],
-            [size5050.x * 2, size5050.y * 6, size5050.x, size5050.y],
-            [size5050.x, size5050.y * 7, size5050.x, size5050.y],
+            [size5050.x * 3, size5050.y * 5, size5050.x, size5050.y],
+            [size5050.x * 4, size5050.y * 5, size5050.x, size5050.y],
+            [size5050.x * 5, size5050.y * 5, size5050.x, size5050.y],
+            [size5050.x * 6, size5050.y * 5, size5050.x, size5050.y],
         ].map(([x, y, w, h]) => new Sprite([new Frame(x, y, w, h)], spritesheet)),
-        piano: new Sprite([new Frame(50 * 4, size150100.y, size150100.x, size150100.y)], spritesheet),
-        medic: new Sprite([new Frame(size5050.x * 2, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
         note: new Sprite([new Frame(size5050.x * 3, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
-        drops: new Sprite([new Frame(size5050.x * 4, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
         hole: new Sprite([new Frame(size5050.x * 5, size5050.y * 2, size5050.x, size5050.y)], spritesheet),
         ufo: new Sprite([new Frame(size5050.x * 6, size5050.y * 2, size5050.x, size5050.y)], spritesheetTransparent),
-        zzz: new Sprite([new Frame(size5050.x * 5, size5050.y * 3, size1010.x, size1010.y)], spritesheet),
-        bubble: new Sprite([new Frame(size5050.x * 5, size5050.y * 3 + 20, size1010.x, size1010.y)], spritesheet),
+        zzz: new Sprite([new Frame(size5050.x * 4 + 1, size5050.y * 2 + 8, size1010.x, size1010.y)], spritesheet),
+        bubble: new Sprite([new Frame(size5050.x * 4, size5050.y * 2 + 20, size1010.x, size1010.y)], spritesheet),
         left: new Sprite([new Frame(0, 0, size5050.x, size5050.y)], arrowCanvas),
         right: new Sprite([new Frame(size5050.x, 0, size5050.x, size5050.y)], arrowCanvas),
         down: new Sprite([new Frame(size5050.x * 2, 0, size5050.x, size5050.y)], arrowCanvas),

@@ -166,7 +166,6 @@ export class Store {
         this.state.creature.tired.start();
         this.state.day.timer.start();
         this.state.day.timer.on(TIMER_EVENT_NAME, () => {
-            console.log("Triggered: state.day.timePassed");
             this.dispatch(incrementDayCount);
         });
 

@@ -2,7 +2,6 @@ import { easeInOutQuad, Easing, ParallelEasing, SequenceEasing } from "../../com
 import { Vec2 } from "../../components/vec2";
 import { GIZMO_SCREEN_HEIGHT_HALF, GIZMO_SCREEN_WIDTH_HALF } from "../../config";
 
-const { floor } = Math;
 const WAVE_PHASE_DURATION = 250;
 
 export class Wave {
@@ -51,15 +50,13 @@ export class Wave {
 
     draw(context: CanvasRenderingContext2D): void {
         this.easings.getValue();
-        let { dx, dy } = this.easings.value;
-        dx = floor(dx);
-        dy = floor(dy);
+        const { dx, dy } = this.easings.value;
         context.fillStyle = '#000';
         context.fillRect(
-            GIZMO_SCREEN_WIDTH_HALF - dx,
-            GIZMO_SCREEN_HEIGHT_HALF - dy,
-            dx * 2,
-            dy * 2,
+            GIZMO_SCREEN_WIDTH_HALF - dx|0,
+            GIZMO_SCREEN_HEIGHT_HALF - dy|0,
+            dx * 2|0,
+            dy * 2|0,
         );
     }
 }
@@ -72,8 +69,8 @@ export class WaveOut extends Wave {
         context.fillRect(
             0,
             0,
-            floor(dx) * 2,
-            floor(dy) * 2,
+            dx * 2|0,
+            dy * 2|0,
         );
     }
 }

@@ -42,13 +42,13 @@ export class Sprite {
         const { x: w, y: h } = frame.size;
         dw = (dw ? dw : w) * SCALE;
         dh = (dh ? dh : h) * SCALE;
-        context.drawImage(this.sheet, frame.pos.x, frame.pos.y, w, h, x, y, dw, dh);
+        context.drawImage(this.sheet, frame.pos.x|0, frame.pos.y|0, w|0, h|0, x|0, y|0, dw|0, dh|0);
 
         if (invert) {
             context.save()
             context.fillStyle = '#fff';
             context.globalCompositeOperation = 'difference';
-            context.fillRect(x, y, dw, dh);
+            context.fillRect(x|0, y|0, dw|0, dh|0);
             context.restore();
         }
     }

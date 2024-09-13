@@ -1,14 +1,13 @@
 import { Vec2 } from "./components/vec2";
 
-const { floor } = Math;
 export const DEBUG_MODE = false;
 export const GIZMO_MARGIN = 40;
 export const WIDTH = 200 + GIZMO_MARGIN * 2;
-export const HEIGHT = 80 + GIZMO_MARGIN * 2;
+export const HEIGHT = 82 + GIZMO_MARGIN * 2;
 export const GIZMO_SCREEN_WIDTH = WIDTH - GIZMO_MARGIN * 2;
 export const GIZMO_SCREEN_HEIGHT = HEIGHT - GIZMO_MARGIN * 2;
-export const GIZMO_SCREEN_WIDTH_HALF = floor(GIZMO_SCREEN_WIDTH / 2);
-export const GIZMO_SCREEN_HEIGHT_HALF = floor(GIZMO_SCREEN_HEIGHT / 2);
+export const GIZMO_SCREEN_WIDTH_HALF = (GIZMO_SCREEN_WIDTH / 2)|0;
+export const GIZMO_SCREEN_HEIGHT_HALF = (GIZMO_SCREEN_HEIGHT / 2)|0;
 export const GIZMO_EARS_SIZE = Vec2.new(20, 30);
 export const BUTTON_WIDTH = 20;
 export const BUTTON_HEIGHT = 20;
