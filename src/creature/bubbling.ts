@@ -72,12 +72,12 @@ const createBubbling = (className: string, resourceName: string, creatureLook: s
         }
 
         draw(context: CanvasRenderingContext2D) {
-            this.bubbling.forEach(a => a.draw(context));
             if (this.creature[creatureLook]) {
                 this.creature[creatureLook].draw(context, 0, 0);
             } else {
                 this.creature.idle.draw(context, 0, 0);
             }
+            this.bubbling.forEach(a => a.draw(context));
         }
 
         isDone(): boolean {
