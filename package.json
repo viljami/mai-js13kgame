@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --minify terser --assetsDir a",
+    "build": "tsc && vite build --minify terser --assetsDir a --base ''",
     "optimize": "tsc && vite optimize",
     "preview": "vite preview"
   },
