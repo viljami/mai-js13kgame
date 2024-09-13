@@ -2,21 +2,25 @@ import { InputManager } from './components/input';
 import { Timer } from './components/timer';
 import { HEIGHT, WIDTH } from './config';
 import { ViewManager } from './views/view-manager';
-import { Store } from './store';
 import { MainView } from './views/main';
 import { FoodGameView } from './views/food-game';
 import { EndView } from './views/end';
 
 (function() {
     window.addEventListener("load", () => {
-        const canvas = document.getElementById("app") as HTMLCanvasElement;
+        const canvas = document.querySelector('canvas') as HTMLCanvasElement;
         canvas.width = WIDTH;
         canvas.height = HEIGHT;
 
         const resize = () => {
-            const { innerWidth, innerHeight } = window;
+            const { devicePixelRatio, innerWidth, innerHeight } = window;
             const a = innerWidth < innerHeight ? innerWidth : innerHeight;
-            const d = Math.floor(a / WIDTH);
+            let d = a / WIDTH|0;
+
+            if (d <= 0) {
+                d = 1;
+            }
+
             canvas.width = WIDTH;
             canvas.height = HEIGHT;
             canvas.style.width = `${d * WIDTH}px`;
